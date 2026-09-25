@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+dist/
+
+# Environment variables — never commit these
+.env
+.env.local
+.env.*.local
+
+# Vite build artifacts
+dist-ssr/
+*.local
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/extensions.json
