@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Film, Sparkles } from 'lucide-react'
 import { Layout } from '../../components/layout/Layout'
+import { BackButton } from '../../components/ui/BackButton'
 import { MovieGrid } from '../../components/movie/MovieGrid'
 import { SkeletonGrid } from '../../components/ui/Skeleton'
 import { ErrorState } from '../../components/ui/ErrorState'
@@ -112,28 +113,30 @@ export default function GenreMoviesPage() {
   return (
     <Layout title={pageTitle}>
       <div className="page-container">
-        {/* Back breadcrumb */}
-        <Link
-          to="/genres"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            fontSize: 13,
-            color: 'var(--color-muted)',
-            textDecoration: 'none',
-            marginBottom: 20,
-            transition: 'color var(--duration-fast)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = colors.accent
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = 'var(--color-muted)'
-          }}
-        >
-          <ArrowLeft size={15} /> All Genres
-        </Link>
+        {/* Back button + breadcrumb row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+          <BackButton fallback="/genres" />
+          <Link
+            to="/genres"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 13,
+              color: 'var(--color-muted)',
+              textDecoration: 'none',
+              transition: 'color var(--duration-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = colors.accent
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--color-muted)'
+            }}
+          >
+            <ArrowLeft size={15} /> All Genres
+          </Link>
+        </div>
 
         {/* Header Banner in Genre Tint */}
         <div

@@ -18,6 +18,7 @@ import { GenreTag } from '../../components/ui/GenreTag'
 import { ImageWithFallback } from '../../components/ui/ImageWithFallback'
 import { ErrorState } from '../../components/ui/ErrorState'
 import { SkeletonHero } from '../../components/ui/Skeleton'
+import { BackButton } from '../../components/ui/BackButton'
 import { useLibrary } from '../../context/LibraryContext'
 import { getMovieDetails } from '../../services/tmdb/movies'
 import { posterUrl, backdropUrl, profileUrl } from '../../services/tmdb/images'
@@ -161,6 +162,17 @@ export default function MovieDetailsPage() {
           alignItems: 'flex-end',
         }}
       >
+        {/* Back button — top-left overlay above the backdrop */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 16,
+            left: 16,
+            zIndex: 10,
+          }}
+        >
+          <BackButton />
+        </div>
         {/* Full-bleed Backdrop Image */}
         {backdrop && (
           <img
