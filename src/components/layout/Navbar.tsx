@@ -330,6 +330,16 @@ export function Navbar() {
               {initials}
             </NavLink>
 
+            {/* Mobile Search Button — visible only on mobile, navigates to /search */}
+            <button
+              onClick={() => navigate('/search')}
+              aria-label="Search"
+              className="btn-icon show-mobile"
+              style={{ display: 'none' }}
+            >
+              <Search size={18} />
+            </button>
+
             {/* Mobile Hamburger Button */}
             <button
               onClick={openMenu}
