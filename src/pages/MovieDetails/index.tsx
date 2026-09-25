@@ -5,7 +5,6 @@ import {
   Heart,
   Bookmark,
   Play,
-  ArrowLeft,
   Clock,
   Calendar,
   Globe,
@@ -223,29 +222,6 @@ export default function MovieDetailsPage() {
             paddingBottom: 40,
           }}
         >
-          {/* Back link */}
-          <Link
-            to="/discover"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              color: 'var(--color-muted)',
-              fontSize: 13,
-              fontWeight: 500,
-              textDecoration: 'none',
-              marginBottom: 28,
-              transition: 'color var(--duration-fast)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'var(--color-accent)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'var(--color-muted)'
-            }}
-          >
-            <ArrowLeft size={15} /> Back to Movies
-          </Link>
 
           <div
             style={{
