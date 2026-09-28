@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Flame,
@@ -22,6 +23,8 @@ import {
 import { Layout } from '../../components/layout/Layout'
 import { useGenres } from '../../context/GenresContext'
 import { getGenreColor } from '../../lib/genreColors'
+import { useInView } from '../../hooks/useInView'
+import { useGenreBackdrop } from '../../hooks/useGenreBackdrop'
 
 interface GenreDefinition {
   name: string
@@ -49,6 +52,127 @@ const GENRE_TILES: GenreDefinition[] = [
   { name: 'Thriller',        fallbackId: 53,    icon: Zap,         description: 'Relentless suspense, nail-biting twists & tension' },
 ]
 
+interface GenreTileCardProps {
+  item: GenreDefinition
+  genreId: number
+  genreName: string
+}
+
+function GenreTileCard({ item, genreId, genreName }: GenreTileCardProps) {
+  // Only trigger TMDB fetch when the tile enters the viewport
+  const { ref, isInView } = useInView<HTMLAnchorElement>({ rootMargin: '120px 0px' })
+  const { backdropUrl } = useGenreBackdrop(genreId, isInView, 'w500')
+  const [imgLoaded, setImgLoaded] = useState(false)
+  const [imgError, setImgError] = useState(false)
+
+  const Icon = item.icon
+  const colors = getGenreColor(genreName)
+
+  return (
+    <Link
+      ref={ref}
+      to={`/genres/${genreId}`}
+      className="genre-tile"
+      style={{
+        background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.88) 100%)`,
+        border: `1px solid ${colors.border}`,
+        ['--tile-glow' as string]: colors.glow,
+      }}
+    >
+      {/* TMDB dynamic backdrop with fade-in and hover zoom */}
+      {backdropUrl && !imgError && (
+        <>
+          <img
+            src={backdropUrl}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+            className={`genre-tile__img ${imgLoaded ? 'genre-tile__img--loaded' : ''}`}
+          />
+          {/* Genre-tinted dark gradient overlay preserving 4.5:1 text contrast */}
+          <div
+            className="genre-tile__overlay"
+            style={{
+              background: `linear-gradient(to bottom, rgba(11, 7, 20, 0.35) 0%, rgba(11, 7, 20, 0.70) 50%, rgba(11, 7, 20, 0.95) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.82) 100%)`,
+            }}
+          />
+        </>
+      )}
+
+      {/* Foreground content: icon chip, arrow, title and description */}
+      <div className="genre-tile__content">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+            marginBottom: 16,
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              background: colors.bg,
+              border: `1px solid ${colors.border}`,
+              color: colors.accent,
+              flexShrink: 0,
+              boxShadow: `0 4px 14px ${colors.bg}`,
+            }}
+          >
+            <Icon size={22} strokeWidth={1.8} />
+          </div>
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-muted)',
+            }}
+          >
+            <ArrowRight size={14} />
+          </div>
+        </div>
+
+        <div>
+          <h2
+            style={{
+              fontSize: 17,
+              fontWeight: 600,
+              color: 'var(--color-text)',
+              marginBottom: 6,
+            }}
+          >
+            {genreName}
+          </h2>
+          <p
+            style={{
+              fontSize: 12,
+              color: 'var(--color-muted)',
+              lineHeight: 1.45,
+              margin: 0,
+            }}
+          >
+            {item.description}
+          </p>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
 export default function GenresPage() {
   const { genres } = useGenres()
 
@@ -69,90 +193,14 @@ export default function GenresPage() {
             )
             const genreId = matched ? matched.id : item.fallbackId
             const genreName = matched ? matched.name : item.name
-            const Icon = item.icon
-            const colors = getGenreColor(genreName)
 
             return (
-              <Link
+              <GenreTileCard
                 key={genreId}
-                to={`/genres/${genreId}`}
-                className="genre-tile glass"
-                style={{
-                  minHeight: 160,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  padding: '22px 20px',
-                  background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.85) 100%)`,
-                  border: `1px solid ${colors.border}`,
-                  textDecoration: 'none',
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    marginBottom: 16,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 44,
-                      height: 44,
-                      borderRadius: 12,
-                      background: colors.bg,
-                      border: `1px solid ${colors.border}`,
-                      color: colors.accent,
-                      flexShrink: 0,
-                      boxShadow: `0 4px 14px ${colors.bg}`,
-                    }}
-                  >
-                    <Icon size={22} strokeWidth={1.8} />
-                  </div>
-                  <div
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: '50%',
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'var(--color-muted)',
-                    }}
-                  >
-                    <ArrowRight size={14} />
-                  </div>
-                </div>
-
-                <div>
-                  <h2
-                    style={{
-                      fontSize: 17,
-                      fontWeight: 600,
-                      color: 'var(--color-text)',
-                      marginBottom: 6,
-                    }}
-                  >
-                    {genreName}
-                  </h2>
-                  <p
-                    style={{
-                      fontSize: 12,
-                      color: 'var(--color-muted)',
-                      lineHeight: 1.45,
-                      margin: 0,
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                </div>
-              </Link>
+                item={item}
+                genreId={genreId}
+                genreName={genreName}
+              />
             )
           })}
         </div>

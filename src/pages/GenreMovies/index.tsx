@@ -11,6 +11,7 @@ import { LoadMoreButton } from '../../components/ui/LoadMoreButton'
 import { useGenres } from '../../context/GenresContext'
 import { discoverMovies } from '../../services/tmdb/movies'
 import { getGenreColor } from '../../lib/genreColors'
+import { useGenreBackdrop } from '../../hooks/useGenreBackdrop'
 import type { TMDBMovie } from '../../services/tmdb/types'
 import type { ApiError } from '../../types'
 
@@ -37,6 +38,11 @@ export default function GenreMoviesPage() {
   const [error, setError] = useState<ApiError | null>(null)
   const [sortBy, setSortBy] = useState('popularity.desc')
   const [retryKey, setRetryKey] = useState(0)
+
+  // Dynamic TMDB backdrop for header banner with 24h cache and graceful fallback
+  const { backdropUrl } = useGenreBackdrop(id ? Number(id) : undefined, true, 'w780')
+  const [bannerImgLoaded, setBannerImgLoaded] = useState(false)
+  const [bannerImgError, setBannerImgError] = useState(false)
 
   // Fetch page 1 when genre ID, sort order, or retry changes
   useEffect(() => {
@@ -151,6 +157,42 @@ export default function GenreMoviesPage() {
             overflow: 'hidden',
           }}
         >
+          {/* Dynamic TMDB backdrop with fade-in and tinted dark gradient overlay */}
+          {backdropUrl && !bannerImgError && (
+            <>
+              <img
+                src={backdropUrl}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setBannerImgLoaded(true)}
+                onError={() => setBannerImgError(true)}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center 30%',
+                  opacity: bannerImgLoaded ? 0.35 : 0,
+                  transition: 'opacity 400ms ease',
+                  pointerEvents: 'none',
+                  zIndex: 0,
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: `linear-gradient(to right, rgba(11, 7, 20, 0.94) 0%, rgba(11, 7, 20, 0.80) 55%, rgba(11, 7, 20, 0.65) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.85) 100%)`,
+                  pointerEvents: 'none',
+                  zIndex: 1,
+                }}
+              />
+            </>
+          )}
+
           {/* Subtle ambient light */}
           <div
             style={{
@@ -164,13 +206,14 @@ export default function GenreMoviesPage() {
               opacity: 0.12,
               filter: 'blur(50px)',
               pointerEvents: 'none',
+              zIndex: 1,
             }}
           />
 
           <div
             style={{
               position: 'relative',
-              zIndex: 1,
+              zIndex: 2,
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-start',

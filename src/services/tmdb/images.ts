@@ -8,7 +8,10 @@ export function posterUrl(path: string | null, size: 'w342' | 'w500' | 'w780' = 
   return `${IMAGE_BASE}/${size}${path}`
 }
 
-export function backdropUrl(path: string | null, size: 'w780' | 'w1280' = 'w1280'): string | null {
+export function backdropUrl(
+  path: string | null,
+  size: 'w300' | 'w500' | 'w780' | 'w1280' = 'w1280',
+): string | null {
   if (!path) return null
   return `${IMAGE_BASE}/${size}${path}`
 }
