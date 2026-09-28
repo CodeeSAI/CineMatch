@@ -9,8 +9,8 @@ interface Props {
 export function MovieGrid({ movies }: Props) {
   return (
     <div className="movie-grid">
-      {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
+      {movies.map((movie, idx) => (
+        <MovieCard key={movie.id} movie={movie} index={idx} />
       ))}
     </div>
   )

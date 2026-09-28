@@ -124,9 +124,9 @@ export default function HomePage() {
           />
         )}
 
-        {/* Tabbed Indian Cinema Row */}
-        <div>
-          <div style={{ marginBottom: 12 }}>
+        {/* Tabbed Indian Cinema Section (Vivid Gradient Band) */}
+        <div className="row-band--gradient">
+          <div style={{ marginBottom: 16 }}>
             <div
               style={{
                 display: 'flex',
@@ -140,10 +140,10 @@ export default function HomePage() {
               <span
                 style={{
                   fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: '0.06em',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-muted)',
+                  color: 'var(--color-sun)',
                   marginRight: 4,
                   flexShrink: 0,
                 }}
@@ -161,7 +161,7 @@ export default function HomePage() {
                     style={{ flexShrink: 0 }}
                   >
                     <span>{tab.label}</span>
-                    <span style={{ fontSize: 11, opacity: 0.75 }}>({tab.native})</span>
+                    <span style={{ fontSize: 11, opacity: 0.8 }}>({tab.native})</span>
                   </button>
                 )
               })}
@@ -178,6 +178,7 @@ export default function HomePage() {
           />
         </div>
 
+        {/* Trending — Plain dark row */}
         <MovieRow
           title="Trending"
           movies={trending.data?.results ?? null}
@@ -187,6 +188,7 @@ export default function HomePage() {
           viewAllTo="/discover?sortBy=popularity&sortDir=desc"
         />
 
+        {/* Popular — Plain dark row */}
         <MovieRow
           title="Popular"
           movies={popular.data?.results ?? null}
@@ -196,6 +198,7 @@ export default function HomePage() {
           viewAllTo="/discover?sortBy=popularity&sortDir=desc"
         />
 
+        {/* Top Rated — One Cream Light Band with Ink Text */}
         <MovieRow
           title="Top Rated"
           movies={topRated.data?.results ?? null}
@@ -203,8 +206,10 @@ export default function HomePage() {
           error={topRated.error}
           onRetry={topRated.refetch}
           viewAllTo="/discover?sortBy=vote_average&sortDir=desc"
+          variant="cream"
         />
 
+        {/* Upcoming — Plain dark row */}
         <MovieRow
           title="Upcoming"
           movies={upcoming.data?.results ?? null}

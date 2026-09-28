@@ -5,16 +5,25 @@ CineMatch is a movie discovery and personal tracking web application built with 
 
 ---
 
-## Design System & Aesthetics ("Midnight & Gold" Frosted Glass)
-The entire site adheres to a cohesive, cinematic frosted-glass aesthetic:
-- **Base Palette**: Midnight background (`#07080D`), dark surface (`#0E1018`), text (`#F4F2ED`), muted labels (`#A3A7B5`), subtle text (`#656978`).
-- **Accents**: Warm cinematic Gold (`#F2B33D`, hover `#FFC65A`, text on accent `#1A1204`), Indigo (`#6D7CFF`) for secondary highlights, and Rose (`#FF5C7A`) for favorite heart and danger states.
-- **Frosted Glass Utilities**:
-  - `.glass`: standard blur (12px), translucent fill, subtle inner light, and delicate border.
-  - `.glass-strong`: elevated blur (20px) for modals, mobile drawers, and sticky headers.
-  - `@supports not (backdrop-filter: blur(1px))` fallbacks for older browser support.
-  - **Performance Rule**: Large movie grids strictly avoid per-card `backdrop-filter: blur()`. Blur is reserved for persistent structural surfaces (navbar, drawer, filter panel, hero).
-- **Typography**: Google Fonts `"Fraunces"` serif for expressive display headings and `"DM Sans"` for clean, legible body text.
+## Design System & Aesthetics ("Cinema Neon" Vibrant & Animated)
+The entire site adheres to a vivid, animated, and premium "Cinema Neon" aesthetic:
+- **Base Palette**: Dark plum background (`#0B0714`), surface (`#150E24`), surface-2 (`#1E1433`), text (`#F7F3FF`), muted labels (`#B4AACB`).
+- **Cinema Neon Accents**: Crimson (`#FF3B5C`), Coral (`#FF7A45`), Sun Amber (`#FFC533`), Violet (`#8B5CF6`), Teal (`#14D3C6`), Sky (`#38BDF8`), Mint (`#4ADE80`), and Neon Pink (`#FF5FA2`).
+- **Light Surface**: Cream surface (`#FFF6EC`) with ink text (`#1B1030`) for high-contrast section bands.
+- **Gradient Tokens**:
+  - `--grad-hot`: Crimson → Coral → Sun (`#FF3B5C` → `#FF7A45` → `#FFC533`)
+  - `--grad-cool`: Violet → Sky → Teal (`#8B5CF6` → `#38BDF8` → `#14D3C6`)
+  - `--grad-candy`: Pink → Violet (`#FF5FA2` → `#8B5CF6`)
+  - `--grad-fresh`: Teal → Mint (`#14D3C6` → `#4ADE80`)
+- **Genre Color Mapping (`src/lib/genreColors.ts`)**: 16 primary movie genres mapped to distinct cinema neon accents, backgrounds, borders, gradients, and card glow shadows.
+- **Ambient Drifting Background**: Fixed background layer of 4 soft color blobs (violet, crimson, teal, sun) drifting slowly (transform only, 30–40s loops), paused below 768px and under `prefers-reduced-motion`. No backdrop-filter on this layer.
+- **Typography & Gradient Text**: Google Fonts `"Fraunces"` serif for expressive display headings and `"DM Sans"` for UI. Animated `.gradient-text` (8s loop) for titles and hero.
+- **Alternating Home Sections**: Dark rows, a vivid gradient band (Indian Cinema), and a cream light band (Top Rated) with ink text.
+- **Interactive Navbar**: Floating glass bar with sliding gradient underline on hover/active, logo shimmer every 6s, gradient count badges, gradient avatar ring, and staggered mobile drawer items.
+- **High-Performance MovieCard**: Strictly NO backdrop-filter. 6px lift, 1.05 poster zoom, first-genre glow shadow, gradient hover overlay, gradient rating badge, heart pop + ring burst on favorite, bookmark bounce, and viewport-staggered entrance.
+- **Trending Hero Carousel**: 3 slides, 8s auto-rotation (paused on hover and reduced motion), Ken Burns backdrop zoom, animated gradient glow border on info panel, staggered content slide-ins, and active dot time progress fill.
+- **Motion Kit (`src/hooks/useInView.ts` + `src/index.css`)**: IntersectionObserver `.reveal` (fade + translateY 16px) with CSS `--i` stagger, button hover shine sweep, press scale 0.97, tinted shimmer skeletons, and 250ms page transitions. All decorative motion respects `prefers-reduced-motion`.
+- **Frosted Glass Utilities**: Blur reserved for structural persistent surfaces (navbar, mobile drawer, hero info panel, modal). Visible `:focus-visible` rings with Sun Amber contrast.
 
 ---
 

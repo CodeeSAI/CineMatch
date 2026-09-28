@@ -132,7 +132,7 @@ export function MobileMenu({ isOpen, onClose }: Props) {
 
         <nav aria-label="Mobile navigation">
           <ul style={{ listStyle: 'none', padding: '0 12px', margin: 0 }}>
-            {NAV_ITEMS.map(({ to, label, icon: Icon }) => {
+            {NAV_ITEMS.map(({ to, label, icon: Icon }, index) => {
               const count =
                 to === '/favorites'
                   ? favorites.length
@@ -141,7 +141,11 @@ export function MobileMenu({ isOpen, onClose }: Props) {
                   : 0
 
               return (
-                <li key={to} style={{ marginBottom: 4 }}>
+                <li
+                  key={to}
+                  className="drawer-stagger-item"
+                  style={{ '--i': index, marginBottom: 4 } as React.CSSProperties}
+                >
                   <NavLink
                     to={to}
                     end={to === '/'}
@@ -154,10 +158,10 @@ export function MobileMenu({ isOpen, onClose }: Props) {
                       textDecoration: 'none',
                       fontSize: 15,
                       fontWeight: isActive ? 600 : 400,
-                      color: isActive ? 'var(--color-accent)' : 'var(--color-text)',
-                      background: isActive ? 'rgba(242, 179, 61, 0.12)' : 'transparent',
+                      color: isActive ? 'var(--color-crimson)' : 'var(--color-text)',
+                      background: isActive ? 'rgba(255, 59, 92, 0.12)' : 'transparent',
                       border: isActive
-                        ? '1px solid rgba(242, 179, 61, 0.25)'
+                        ? '1px solid rgba(255, 59, 92, 0.30)'
                         : '1px solid transparent',
                       transition: 'background var(--duration-fast), color var(--duration-fast)',
                     })}
@@ -173,11 +177,12 @@ export function MobileMenu({ isOpen, onClose }: Props) {
                           borderRadius: 'var(--radius-pill)',
                           background:
                             to === '/favorites'
-                              ? 'var(--color-rose)'
-                              : 'var(--color-accent)',
-                          color: to === '/favorites' ? '#FFF' : '#1A1204',
+                              ? 'var(--grad-hot)'
+                              : 'var(--grad-cool)',
+                          color: '#FFFFFF',
                           fontSize: 11,
-                          fontWeight: 700,
+                          fontWeight: 800,
+                          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.4)',
                         }}
                       >
                         {count}

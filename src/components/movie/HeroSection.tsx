@@ -68,7 +68,7 @@ export function HeroSection({ movies }: Props) {
 
   return (
     <div
-      className="hero"
+      className={`hero ${isHovered ? 'hero-paused' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
@@ -78,10 +78,10 @@ export function HeroSection({ movies }: Props) {
         display: 'flex',
         alignItems: 'flex-end',
         overflow: 'hidden',
-        background: '#07080D',
+        background: '#0B0714',
       }}
     >
-      {/* Full-bleed Backdrop Image */}
+      {/* Full-bleed Backdrop Image with Slow Ken Burns Zoom */}
       {backdrop ? (
         <img
           key={movie.id}
@@ -89,6 +89,7 @@ export function HeroSection({ movies }: Props) {
           alt=""
           aria-hidden="true"
           loading="eager"
+          className="hero-ken-burns"
           style={{
             position: 'absolute',
             inset: 0,
@@ -96,8 +97,7 @@ export function HeroSection({ movies }: Props) {
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center top',
-            opacity: 0.42,
-            transition: 'opacity 350ms ease-in-out',
+            opacity: 0.45,
           }}
         />
       ) : (
@@ -105,7 +105,7 @@ export function HeroSection({ movies }: Props) {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(135deg, #0E1018 0%, #07080D 100%)',
+            background: 'linear-gradient(135deg, #150E24 0%, #0B0714 100%)',
           }}
         />
       )}
@@ -117,7 +117,7 @@ export function HeroSection({ movies }: Props) {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to bottom, rgba(7, 8, 13, 0.15) 0%, rgba(7, 8, 13, 0.45) 45%, rgba(7, 8, 13, 0.88) 80%, #07080D 100%)',
+            'linear-gradient(to bottom, rgba(11, 7, 20, 0.15) 0%, rgba(11, 7, 20, 0.45) 45%, rgba(11, 7, 20, 0.88) 80%, #0B0714 100%)',
         }}
       />
       <div
@@ -126,7 +126,7 @@ export function HeroSection({ movies }: Props) {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to right, rgba(7, 8, 13, 0.75) 0%, rgba(7, 8, 13, 0.25) 60%, transparent 100%)',
+            'linear-gradient(to right, rgba(11, 7, 20, 0.85) 0%, rgba(11, 7, 20, 0.35) 60%, transparent 100%)',
         }}
       />
 
@@ -154,7 +154,7 @@ export function HeroSection({ movies }: Props) {
         </>
       )}
 
-      {/* Hero Content & Frosted Glass Info Panel */}
+      {/* Hero Content & Frosted Glass Info Panel with Animated Glow Border */}
       <div
         className="page-container"
         style={{
@@ -166,146 +166,147 @@ export function HeroSection({ movies }: Props) {
         }}
       >
         <div
-          className="glass-strong"
+          className="hero-panel-glow"
           style={{
             maxWidth: 620,
-            borderRadius: 20,
             padding: '32px 32px 28px',
-            background: 'rgba(14, 16, 24, 0.84)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.18)',
-            boxShadow:
-              '0 20px 48px rgba(0, 0, 0, 0.6), inset 0 1px 0 0 rgba(255, 255, 255, 0.16)',
           }}
         >
-          {/* Eyebrow Label */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '4px 10px',
-              borderRadius: 'var(--radius-pill)',
-              background: 'var(--color-accent-dim)',
-              color: 'var(--color-accent)',
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              marginBottom: 14,
-            }}
-          >
-            Trending #{index + 1}
-          </div>
+          {/* Keyed container forces staggered entrance on slide change */}
+          <div key={movie.id}>
+            {/* Eyebrow Label (Stagger 1) */}
+            <div
+              className="hero-stagger-1"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '4px 10px',
+                borderRadius: 'var(--radius-pill)',
+                background: 'rgba(255, 59, 92, 0.16)',
+                border: '1px solid rgba(255, 59, 92, 0.32)',
+                color: 'var(--color-crimson)',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                marginBottom: 14,
+              }}
+            >
+              Trending #{index + 1}
+            </div>
 
-          {/* Fraunces Title */}
-          <h1
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(28px, 4.5vw, 42px)',
-              fontWeight: 600,
-              lineHeight: 1.15,
-              color: 'var(--color-text)',
-              marginBottom: 12,
-            }}
-          >
-            {movie.title}
-          </h1>
+            {/* Fraunces Title with Gradient Text (Stagger 2) */}
+            <h1
+              className="hero-stagger-2"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(28px, 4.5vw, 42px)',
+                fontWeight: 600,
+                lineHeight: 1.15,
+                color: 'var(--color-text)',
+                marginBottom: 12,
+              }}
+            >
+              <span className="gradient-text">{movie.title}</span>
+            </h1>
 
-          {/* Meta: Rating, Year, Genre pills */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              flexWrap: 'wrap',
-              marginBottom: 14,
-              fontSize: 13,
-              color: 'var(--color-muted)',
-            }}
-          >
-            <span
+            {/* Meta: Rating, Year, Genre pills (Stagger 3) */}
+            <div
+              className="hero-stagger-3"
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 4,
-                fontWeight: 700,
-                color: 'var(--color-accent)',
+                gap: 12,
+                flexWrap: 'wrap',
+                marginBottom: 14,
+                fontSize: 13,
+                color: 'var(--color-muted)',
               }}
             >
-              <Star size={13} fill="currentColor" />
-              {rating}
-            </span>
-
-            <span>•</span>
-            <span>{year}</span>
-
-            {genreNames.map((name) => (
               <span
-                key={name}
                 style={{
-                  padding: '2px 8px',
-                  borderRadius: 'var(--radius-pill)',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.10)',
-                  fontSize: 11,
-                  color: 'var(--color-muted)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  fontWeight: 800,
+                  color: 'var(--color-sun)',
                 }}
               >
-                {name}
+                <Star size={13} fill="currentColor" />
+                {rating}
               </span>
-            ))}
+
+              <span>•</span>
+              <span>{year}</span>
+
+              {genreNames.map((name) => (
+                <span
+                  key={name}
+                  style={{
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-pill)',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    fontSize: 11,
+                    color: 'var(--color-text)',
+                  }}
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
+
+            {/* Clamped Overview (Stagger 4) */}
+            {movie.overview && (
+              <p
+                className="line-clamp-3 hero-stagger-4"
+                style={{
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: 'rgba(247, 243, 255, 0.85)',
+                  marginBottom: 24,
+                }}
+              >
+                {movie.overview}
+              </p>
+            )}
+
+            {/* Action Buttons (Stagger 5) */}
+            <div
+              className="hero-stagger-5"
+              style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}
+            >
+              <Link to={`/movie/${movie.id}`} className="btn-primary">
+                View details
+                <ArrowRight size={15} />
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleWatchlistToggle}
+                aria-pressed={inWl}
+                className="btn-outline"
+                style={{
+                  color: inWl ? 'var(--color-sun)' : 'var(--color-text)',
+                }}
+              >
+                {inWl ? (
+                  <>
+                    <BookmarkCheck size={16} color="var(--color-sun)" />
+                    In Watchlist
+                  </>
+                ) : (
+                  <>
+                    <Bookmark size={16} />
+                    Add to Watchlist
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          {/* Clamped Overview */}
-          {movie.overview && (
-            <p
-              className="line-clamp-3"
-              style={{
-                fontSize: 14,
-                lineHeight: 1.6,
-                color: 'rgba(244, 242, 237, 0.85)',
-                marginBottom: 24,
-              }}
-            >
-              {movie.overview}
-            </p>
-          )}
-
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <Link to={`/movie/${movie.id}`} className="btn-primary">
-              View details
-              <ArrowRight size={15} />
-            </Link>
-
-            <button
-              type="button"
-              onClick={handleWatchlistToggle}
-              aria-pressed={inWl}
-              className="btn-glass"
-              style={{
-                color: inWl ? 'var(--color-accent)' : 'var(--color-text)',
-                borderColor: inWl ? 'rgba(242, 179, 61, 0.4)' : undefined,
-                background: inWl ? 'rgba(242, 179, 61, 0.12)' : undefined,
-              }}
-            >
-              {inWl ? (
-                <>
-                  <BookmarkCheck size={16} color="var(--color-accent)" />
-                  In Watchlist
-                </>
-              ) : (
-                <>
-                  <Bookmark size={16} />
-                  Add to Watchlist
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Slide Indicator Dots */}
+          {/* Slide Indicator Dots with Time Progress Fill */}
           {items.length > 1 && (
             <div
               style={{
@@ -324,18 +325,27 @@ export function HeroSection({ movies }: Props) {
                   onClick={() => setIndex(i)}
                   aria-label={`Go to slide ${i + 1}: ${m.title}`}
                   aria-current={i === index ? 'true' : 'false'}
+                  className={i === index ? 'hero-dot-active' : ''}
                   style={{
-                    width: i === index ? 24 : 8,
+                    position: 'relative',
+                    width: i === index ? 32 : 8,
                     height: 8,
                     borderRadius: 'var(--radius-pill)',
-                    background:
-                      i === index ? 'var(--color-accent)' : 'rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(255, 255, 255, 0.20)',
                     border: 'none',
                     cursor: 'pointer',
                     padding: 0,
-                    transition: 'all var(--duration-fast) ease',
+                    overflow: 'hidden',
+                    transition: 'width var(--duration-fast) ease',
                   }}
-                />
+                >
+                  {i === index && (
+                    <span
+                      key={`progress-${index}`}
+                      className="hero-dot-progress-bar"
+                    />
+                  )}
+                </button>
               ))}
             </div>
           )}
@@ -344,3 +354,4 @@ export function HeroSection({ movies }: Props) {
     </div>
   )
 }
+

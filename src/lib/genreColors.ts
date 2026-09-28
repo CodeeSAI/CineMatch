@@ -1,115 +1,152 @@
-// Curated soft tint color map for the 16 primary movie genres
+// Cinema Neon color palette for the 16 primary movie genres
+// Reused for pills, card glow, tiles, banners, and details
 
 export interface GenreColorSpec {
-  accent: string
-  bg: string
-  border: string
-  gradient: string
+  accent: string    // Vivid hex accent
+  bg: string        // Translucent background
+  border: string    // Border color
+  gradient: string  // Multi-stop gradient
+  glow: string      // Glow shadow for cards
+  textColor: string // Contrast text color
 }
 
 export const DEFAULT_GENRE_COLOR: GenreColorSpec = {
-  accent: '#F2B33D',
-  bg: 'rgba(242, 179, 61, 0.10)',
-  border: 'rgba(242, 179, 61, 0.28)',
-  gradient: 'radial-gradient(circle at 10% 20%, rgba(242, 179, 61, 0.15), transparent 70%)',
+  accent: '#FF3B5C',
+  bg: 'rgba(255, 59, 92, 0.12)',
+  border: 'rgba(255, 59, 92, 0.32)',
+  gradient: 'linear-gradient(135deg, rgba(255, 59, 92, 0.22) 0%, rgba(255, 122, 69, 0.08) 100%)',
+  glow: 'rgba(255, 59, 92, 0.35)',
+  textColor: '#FF3B5C',
 }
 
 export const GENRE_COLORS: Record<string, GenreColorSpec> = {
   action: {
-    accent: '#FF5C7A',
-    bg: 'rgba(255, 92, 122, 0.10)',
-    border: 'rgba(255, 92, 122, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(255, 92, 122, 0.18), transparent 70%)',
+    accent: '#FF3B5C', // Crimson
+    bg: 'rgba(255, 59, 92, 0.14)',
+    border: 'rgba(255, 59, 92, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 59, 92, 0.25) 0%, rgba(255, 122, 69, 0.10) 100%)',
+    glow: 'rgba(255, 59, 92, 0.40)',
+    textColor: '#FF3B5C',
   },
   adventure: {
-    accent: '#F2B33D',
-    bg: 'rgba(242, 179, 61, 0.10)',
-    border: 'rgba(242, 179, 61, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(242, 179, 61, 0.18), transparent 70%)',
+    accent: '#FF7A45', // Coral
+    bg: 'rgba(255, 122, 69, 0.14)',
+    border: 'rgba(255, 122, 69, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 122, 69, 0.25) 0%, rgba(255, 197, 51, 0.10) 100%)',
+    glow: 'rgba(255, 122, 69, 0.38)',
+    textColor: '#FF7A45',
   },
   animation: {
-    accent: '#C084FC',
-    bg: 'rgba(192, 132, 252, 0.10)',
-    border: 'rgba(192, 132, 252, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(192, 132, 252, 0.18), transparent 70%)',
+    accent: '#FF5FA2', // Neon Pink
+    bg: 'rgba(255, 95, 162, 0.14)',
+    border: 'rgba(255, 95, 162, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 95, 162, 0.25) 0%, rgba(139, 92, 246, 0.10) 100%)',
+    glow: 'rgba(255, 95, 162, 0.38)',
+    textColor: '#FF5FA2',
   },
   comedy: {
-    accent: '#34D399',
-    bg: 'rgba(52, 211, 153, 0.10)',
-    border: 'rgba(52, 211, 153, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(52, 211, 153, 0.18), transparent 70%)',
+    accent: '#FFC533', // Sun Amber
+    bg: 'rgba(255, 197, 51, 0.14)',
+    border: 'rgba(255, 197, 51, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 197, 51, 0.25) 0%, rgba(255, 122, 69, 0.10) 100%)',
+    glow: 'rgba(255, 197, 51, 0.38)',
+    textColor: '#FFC533',
   },
   crime: {
-    accent: '#F87171',
-    bg: 'rgba(248, 113, 113, 0.10)',
-    border: 'rgba(248, 113, 113, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(248, 113, 113, 0.18), transparent 70%)',
+    accent: '#FF3B5C', // Crimson
+    bg: 'rgba(255, 59, 92, 0.14)',
+    border: 'rgba(255, 59, 92, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 59, 92, 0.25) 0%, rgba(30, 20, 51, 0.40) 100%)',
+    glow: 'rgba(255, 59, 92, 0.40)',
+    textColor: '#FF3B5C',
   },
   documentary: {
-    accent: '#38BDF8',
-    bg: 'rgba(56, 189, 248, 0.10)',
-    border: 'rgba(56, 189, 248, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.18), transparent 70%)',
+    accent: '#14D3C6', // Teal
+    bg: 'rgba(20, 211, 198, 0.14)',
+    border: 'rgba(20, 211, 198, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(20, 211, 198, 0.25) 0%, rgba(74, 222, 128, 0.10) 100%)',
+    glow: 'rgba(20, 211, 198, 0.38)',
+    textColor: '#14D3C6',
   },
   drama: {
-    accent: '#818CF8',
-    bg: 'rgba(129, 140, 248, 0.10)',
-    border: 'rgba(129, 140, 248, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(129, 140, 248, 0.18), transparent 70%)',
+    accent: '#8B5CF6', // Violet
+    bg: 'rgba(139, 92, 246, 0.14)',
+    border: 'rgba(139, 92, 246, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(56, 189, 248, 0.10) 100%)',
+    glow: 'rgba(139, 92, 246, 0.40)',
+    textColor: '#8B5CF6',
   },
   family: {
-    accent: '#FBBF24',
-    bg: 'rgba(251, 191, 36, 0.10)',
-    border: 'rgba(251, 191, 36, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.18), transparent 70%)',
+    accent: '#4ADE80', // Mint
+    bg: 'rgba(74, 222, 128, 0.14)',
+    border: 'rgba(74, 222, 128, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(74, 222, 128, 0.25) 0%, rgba(20, 211, 198, 0.10) 100%)',
+    glow: 'rgba(74, 222, 128, 0.38)',
+    textColor: '#4ADE80',
   },
   fantasy: {
-    accent: '#F472B6',
-    bg: 'rgba(244, 114, 182, 0.10)',
-    border: 'rgba(244, 114, 182, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(244, 114, 182, 0.18), transparent 70%)',
+    accent: '#FF5FA2', // Pink Violet
+    bg: 'rgba(255, 95, 162, 0.14)',
+    border: 'rgba(255, 95, 162, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 95, 162, 0.25) 0%, rgba(139, 92, 246, 0.15) 100%)',
+    glow: 'rgba(255, 95, 162, 0.38)',
+    textColor: '#FF5FA2',
   },
   history: {
-    accent: '#FB923C',
-    bg: 'rgba(251, 146, 60, 0.10)',
-    border: 'rgba(251, 146, 60, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(251, 146, 60, 0.18), transparent 70%)',
+    accent: '#FF7A45', // Coral Amber
+    bg: 'rgba(255, 122, 69, 0.14)',
+    border: 'rgba(255, 122, 69, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 122, 69, 0.25) 0%, rgba(255, 197, 51, 0.12) 100%)',
+    glow: 'rgba(255, 122, 69, 0.38)',
+    textColor: '#FF7A45',
   },
   horror: {
-    accent: '#A78BFA',
-    bg: 'rgba(167, 139, 250, 0.10)',
-    border: 'rgba(167, 139, 250, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(167, 139, 250, 0.18), transparent 70%)',
+    accent: '#8B5CF6', // Deep Violet
+    bg: 'rgba(139, 92, 246, 0.14)',
+    border: 'rgba(139, 92, 246, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(255, 59, 92, 0.12) 100%)',
+    glow: 'rgba(139, 92, 246, 0.40)',
+    textColor: '#8B5CF6',
   },
   music: {
-    accent: '#60A5FA',
-    bg: 'rgba(96, 165, 250, 0.10)',
-    border: 'rgba(96, 165, 250, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.18), transparent 70%)',
+    accent: '#38BDF8', // Sky
+    bg: 'rgba(56, 189, 248, 0.14)',
+    border: 'rgba(56, 189, 248, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(20, 211, 198, 0.10) 100%)',
+    glow: 'rgba(56, 189, 248, 0.38)',
+    textColor: '#38BDF8',
   },
   mystery: {
-    accent: '#2DD4BF',
-    bg: 'rgba(45, 212, 191, 0.10)',
-    border: 'rgba(45, 212, 191, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(45, 212, 191, 0.18), transparent 70%)',
+    accent: '#14D3C6', // Teal
+    bg: 'rgba(20, 211, 198, 0.14)',
+    border: 'rgba(20, 211, 198, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(20, 211, 198, 0.25) 0%, rgba(139, 92, 246, 0.10) 100%)',
+    glow: 'rgba(20, 211, 198, 0.38)',
+    textColor: '#14D3C6',
   },
   romance: {
-    accent: '#FB7185',
-    bg: 'rgba(251, 113, 133, 0.10)',
-    border: 'rgba(251, 113, 133, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(251, 113, 133, 0.18), transparent 70%)',
+    accent: '#FF5FA2', // Pink
+    bg: 'rgba(255, 95, 162, 0.14)',
+    border: 'rgba(255, 95, 162, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 95, 162, 0.25) 0%, rgba(255, 59, 92, 0.12) 100%)',
+    glow: 'rgba(255, 95, 162, 0.40)',
+    textColor: '#FF5FA2',
   },
   'science fiction': {
-    accent: '#6366F1',
-    bg: 'rgba(99, 102, 241, 0.10)',
-    border: 'rgba(99, 102, 241, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.18), transparent 70%)',
+    accent: '#38BDF8', // Sky / Cyan
+    bg: 'rgba(56, 189, 248, 0.14)',
+    border: 'rgba(56, 189, 248, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(139, 92, 246, 0.12) 100%)',
+    glow: 'rgba(56, 189, 248, 0.40)',
+    textColor: '#38BDF8',
   },
   thriller: {
-    accent: '#E11D48',
-    bg: 'rgba(225, 29, 72, 0.10)',
-    border: 'rgba(225, 29, 72, 0.28)',
-    gradient: 'radial-gradient(circle at 10% 20%, rgba(225, 29, 72, 0.18), transparent 70%)',
+    accent: '#FF3B5C', // Crimson
+    bg: 'rgba(255, 59, 92, 0.14)',
+    border: 'rgba(255, 59, 92, 0.35)',
+    gradient: 'linear-gradient(135deg, rgba(255, 59, 92, 0.25) 0%, rgba(139, 92, 246, 0.10) 100%)',
+    glow: 'rgba(255, 59, 92, 0.40)',
+    textColor: '#FF3B5C',
   },
 }
 

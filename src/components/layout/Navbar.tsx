@@ -124,7 +124,7 @@ export function Navbar() {
               <Logo size={26} />
             </NavLink>
 
-            {/* Desktop Navigation Links with Gold Indicator */}
+            {/* Desktop Navigation Links with Sliding Gradient Underline */}
             <nav
               aria-label="Main navigation"
               style={{ display: 'flex', alignItems: 'center', gap: 6 }}
@@ -135,45 +135,23 @@ export function Navbar() {
                   key={to}
                   to={to}
                   end={to === '/'}
-                  style={({ isActive }) => ({
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                  style={{
                     position: 'relative',
                     padding: '8px 14px',
                     borderRadius: 'var(--radius-btn)',
-                    textDecoration: 'none',
                     fontSize: 14,
-                    fontWeight: isActive ? 600 : 500,
-                    color: isActive ? 'var(--color-accent)' : 'var(--color-muted)',
-                    transition:
-                      'color var(--duration-fast) ease, background var(--duration-fast) ease',
-                  })}
+                    fontWeight: 600,
+                  }}
                 >
-                  {({ isActive }) => (
-                    <>
-                      <span>{label}</span>
-                      {isActive && (
-                        <span
-                          style={{
-                            position: 'absolute',
-                            bottom: 2,
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            width: 18,
-                            height: 2.5,
-                            borderRadius: 2,
-                            background: 'var(--color-accent)',
-                            boxShadow: '0 0 8px var(--color-accent)',
-                          }}
-                        />
-                      )}
-                    </>
-                  )}
+                  {label}
                 </NavLink>
               ))}
             </nav>
           </div>
 
           {/* Right section: Search + Icons + Avatar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* Compact Search Box (Desktop) */}
             <form
               onSubmit={handleSearchSubmit}
@@ -212,9 +190,9 @@ export function Navbar() {
                 }}
                 onFocus={(e) => {
                   e.currentTarget.style.borderColor = 'var(--color-accent)'
-                  e.currentTarget.style.background = 'rgba(14, 16, 24, 0.95)'
+                  e.currentTarget.style.background = 'rgba(21, 14, 36, 0.95)'
                   e.currentTarget.style.boxShadow =
-                    '0 0 0 3px rgba(242, 179, 61, 0.25)'
+                    '0 0 0 3px rgba(255, 59, 92, 0.25)'
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = 'var(--color-glass-border)'
@@ -224,7 +202,7 @@ export function Navbar() {
               />
             </form>
 
-            {/* Favorites Icon with Count Badge */}
+            {/* Favorites Icon with Gradient Count Badge */}
             <NavLink
               to="/favorites"
               aria-label={`Favourites (${favorites.length} saved)`}
@@ -234,7 +212,7 @@ export function Navbar() {
               <Heart
                 size={16}
                 fill={favorites.length > 0 ? 'currentColor' : 'none'}
-                color={favorites.length > 0 ? 'var(--color-rose)' : 'currentColor'}
+                color={favorites.length > 0 ? 'var(--color-crimson)' : 'currentColor'}
               />
               {favorites.length > 0 && (
                 <span
@@ -242,18 +220,18 @@ export function Navbar() {
                     position: 'absolute',
                     top: -3,
                     right: -3,
-                    minWidth: 16,
-                    height: 16,
+                    minWidth: 17,
+                    height: 17,
                     padding: '0 4px',
                     borderRadius: 'var(--radius-pill)',
-                    background: 'var(--color-rose)',
-                    color: '#FFF',
+                    background: 'var(--grad-hot)',
+                    color: '#FFFFFF',
                     fontSize: 10,
-                    fontWeight: 700,
+                    fontWeight: 800,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
+                    boxShadow: '0 2px 8px rgba(255, 59, 92, 0.55)',
                   }}
                 >
                   {favorites.length}
@@ -261,7 +239,7 @@ export function Navbar() {
               )}
             </NavLink>
 
-            {/* Watchlist Icon with Count Badge */}
+            {/* Watchlist Icon with Gradient Count Badge */}
             <NavLink
               to="/watchlist"
               aria-label={`Watchlist (${watchlist.length} saved)`}
@@ -271,7 +249,7 @@ export function Navbar() {
               <Bookmark
                 size={16}
                 fill={watchlist.length > 0 ? 'currentColor' : 'none'}
-                color={watchlist.length > 0 ? 'var(--color-accent)' : 'currentColor'}
+                color={watchlist.length > 0 ? 'var(--color-sky)' : 'currentColor'}
               />
               {watchlist.length > 0 && (
                 <span
@@ -279,18 +257,18 @@ export function Navbar() {
                     position: 'absolute',
                     top: -3,
                     right: -3,
-                    minWidth: 16,
-                    height: 16,
+                    minWidth: 17,
+                    height: 17,
                     padding: '0 4px',
                     borderRadius: 'var(--radius-pill)',
-                    background: 'var(--color-accent)',
-                    color: '#1A1204',
+                    background: 'var(--grad-cool)',
+                    color: '#FFFFFF',
                     fontSize: 10,
-                    fontWeight: 700,
+                    fontWeight: 800,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
+                    boxShadow: '0 2px 8px rgba(56, 189, 248, 0.55)',
                   }}
                 >
                   {watchlist.length}
@@ -298,37 +276,29 @@ export function Navbar() {
               )}
             </NavLink>
 
-            {/* Avatar linking to /profile */}
-            <NavLink
-              to="/profile"
-              aria-label={`Profile — ${profile.displayName}`}
-              className="hidden-mobile"
-              style={{
-                width: 34,
-                height: 34,
-                borderRadius: '50%',
-                background: profile.avatarColor || 'var(--color-accent)',
-                color: '#1A1204',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: 13,
-                fontWeight: 700,
-                textDecoration: 'none',
-                border: '1.5px solid rgba(255, 255, 255, 0.28)',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                marginLeft: 4,
-                transition: 'transform var(--duration-fast) ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.08)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)'
-              }}
-            >
-              {initials}
-            </NavLink>
+            {/* Avatar with Gradient Ring linking to /profile */}
+            <div className="avatar-gradient-ring hidden-mobile" style={{ marginLeft: 2 }}>
+              <NavLink
+                to="/profile"
+                aria-label={`Profile — ${profile.displayName}`}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  background: profile.avatarColor || 'var(--color-accent)',
+                  color: '#FFFFFF',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 12,
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  border: '1.5px solid rgba(21, 14, 36, 0.8)',
+                }}
+              >
+                {initials}
+              </NavLink>
+            </div>
 
             {/* Mobile Search Button — visible only on mobile, navigates to /search */}
             <button

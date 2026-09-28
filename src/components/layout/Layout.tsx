@@ -24,12 +24,20 @@ export function Layout({ children, title }: Props) {
   }, [title])
 
   return (
-    <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Ambient drifting background layer with 4 soft color blobs */}
+      <div className="ambient-blobs-layer" aria-hidden="true">
+        <div className="ambient-blob ambient-blob--violet" />
+        <div className="ambient-blob ambient-blob--crimson" />
+        <div className="ambient-blob ambient-blob--teal" />
+        <div className="ambient-blob ambient-blob--sun" />
+      </div>
+
       <Navbar />
       <main
         id="main-content"
         className="page-enter"
-        style={{ flex: 1 }}
+        style={{ flex: 1, position: 'relative', zIndex: 1 }}
         // Key forces re-animation on route change
         key={location.pathname}
       >
@@ -39,3 +47,4 @@ export function Layout({ children, title }: Props) {
     </div>
   )
 }
+

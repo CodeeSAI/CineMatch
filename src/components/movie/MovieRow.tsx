@@ -14,9 +14,18 @@ interface Props {
   error: ApiError | null
   onRetry?: () => void
   viewAllTo?: string
+  variant?: 'default' | 'gradient' | 'cream'
 }
 
-export function MovieRow({ title, movies, loading, error, onRetry, viewAllTo }: Props) {
+export function MovieRow({
+  title,
+  movies,
+  loading,
+  error,
+  onRetry,
+  viewAllTo,
+  variant = 'default',
+}: Props) {
   const rowRef = useRef<HTMLDivElement>(null)
 
   function scroll(offset: number) {
@@ -25,28 +34,54 @@ export function MovieRow({ title, movies, loading, error, onRetry, viewAllTo }: 
     }
   }
 
+  const bandClass =
+    variant === 'gradient'
+      ? 'row-band--gradient'
+      : variant === 'cream'
+      ? 'row-band--cream'
+      : ''
+
   return (
-    <section aria-label={title} style={{ marginBottom: 48, position: 'relative' }}>
+    <section
+      aria-label={title}
+      className={bandClass}
+      style={{
+        marginBottom: variant === 'default' ? 48 : 0,
+        position: 'relative',
+      }}
+    >
       {/* Header */}
-      <div className="movie-row__header">
+      <div
+        className="movie-row__header"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 16,
+        }}
+      >
         <h2
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 22,
             fontWeight: 600,
-            color: 'var(--color-text)',
+            color: variant === 'cream' ? 'var(--color-ink)' : 'var(--color-text)',
             letterSpacing: '-0.01em',
           }}
         >
-          {title}
+          {variant === 'gradient' ? (
+            <span className="gradient-text">{title}</span>
+          ) : (
+            title
+          )}
         </h2>
         {viewAllTo && (
           <Link
             to={viewAllTo}
             style={{
               fontSize: 13,
-              fontWeight: 500,
-              color: 'var(--color-accent)',
+              fontWeight: 600,
+              color: variant === 'cream' ? '#C81D3D' : 'var(--color-crimson)',
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
@@ -95,9 +130,9 @@ export function MovieRow({ title, movies, loading, error, onRetry, viewAllTo }: 
 
           {/* Horizontal Scroll Strip with Scroll-Snap */}
           <div ref={rowRef} className="scroll-row">
-            {movies.map((movie) => (
+            {movies.map((movie, idx) => (
               <div key={movie.id} className="movie-row__card">
-                <MovieCard movie={movie} reason={movie.reason} />
+                <MovieCard movie={movie} reason={movie.reason} index={idx} />
               </div>
             ))}
           </div>
@@ -106,3 +141,4 @@ export function MovieRow({ title, movies, loading, error, onRetry, viewAllTo }: 
     </section>
   )
 }
+

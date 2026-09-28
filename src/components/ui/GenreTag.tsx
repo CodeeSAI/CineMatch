@@ -1,21 +1,25 @@
+import { getGenreColor } from '../../lib/genreColors'
+
 interface Props {
   label: string
   small?: boolean
 }
 
-/** Pill badge for genre labels */
+/** Pill badge for genre labels in curated cinema neon color */
 export function GenreTag({ label, small = false }: Props) {
+  const colors = getGenreColor(label)
+
   return (
     <span
       style={{
         display: 'inline-block',
         padding: small ? '2px 8px' : '3px 10px',
         borderRadius: 'var(--radius-pill)',
-        border: '1px solid var(--color-glass-border)',
-        background: 'rgba(255, 255, 255, 0.04)',
+        border: `1px solid ${colors.border}`,
+        background: colors.bg,
         fontSize: small ? 11 : 12,
-        fontWeight: 500,
-        color: 'var(--color-muted)',
+        fontWeight: 600,
+        color: colors.accent,
         whiteSpace: 'nowrap',
         lineHeight: 1.4,
       }}
@@ -24,3 +28,4 @@ export function GenreTag({ label, small = false }: Props) {
     </span>
   )
 }
+
