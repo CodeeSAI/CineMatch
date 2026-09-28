@@ -147,7 +147,7 @@ export default function GenreMoviesPage() {
             padding: '32px 28px',
             marginBottom: 32,
             border: `1px solid ${colors.border}`,
-            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 16, 24, 0.88) 100%)`,
+            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.90) 100%)`,
             overflow: 'hidden',
           }}
         >

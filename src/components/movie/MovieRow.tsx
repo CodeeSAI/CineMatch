@@ -14,7 +14,7 @@ interface Props {
   error: ApiError | null
   onRetry?: () => void
   viewAllTo?: string
-  variant?: 'default' | 'gradient' | 'cream'
+  variant?: 'default' | 'gradient' | 'jewel' | 'nested'
 }
 
 export function MovieRow({
@@ -37,18 +37,23 @@ export function MovieRow({
   const bandClass =
     variant === 'gradient'
       ? 'row-band--gradient'
-      : variant === 'cream'
-      ? 'row-band--cream'
+      : variant === 'jewel'
+      ? 'row-band--jewel'
       : ''
+
+  const sectionClass = [
+    'movie-row-section',
+    variant === 'nested' ? 'movie-row-section--nested' : '',
+    bandClass,
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
     <section
       aria-label={title}
-      className={bandClass}
-      style={{
-        marginBottom: variant === 'default' ? 48 : 0,
-        position: 'relative',
-      }}
+      className={sectionClass}
+      style={{ position: 'relative' }}
     >
       {/* Header */}
       <div
@@ -65,11 +70,11 @@ export function MovieRow({
             fontFamily: 'var(--font-display)',
             fontSize: 22,
             fontWeight: 600,
-            color: variant === 'cream' ? 'var(--color-ink)' : 'var(--color-text)',
+            color: 'var(--color-text)',
             letterSpacing: '-0.01em',
           }}
         >
-          {variant === 'gradient' ? (
+          {variant === 'gradient' || variant === 'jewel' ? (
             <span className="gradient-text">{title}</span>
           ) : (
             title
@@ -81,7 +86,7 @@ export function MovieRow({
             style={{
               fontSize: 13,
               fontWeight: 600,
-              color: variant === 'cream' ? '#C81D3D' : 'var(--color-crimson)',
+              color: 'var(--color-crimson)',
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',

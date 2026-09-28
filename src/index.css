@@ -2,7 +2,7 @@
 
 /* ─────────────────────────────────────────────────────────
    CineMatch Design System — Tailwind v4 @theme tokens
-   "Cinema Neon" Aesthetic (Dark plum base + vivid accents + cream)
+   "Cinema Neon" Aesthetic (Dark plum base + vivid accents + jewel tones)
    ───────────────────────────────────────────────────────── */
 @theme {
   /* Fonts */
@@ -17,9 +17,6 @@
   --color-glass-strong:   rgba(21, 14, 36, 0.88);
   --color-glass-border:   rgba(255, 255, 255, 0.14);
 
-  /* Light surface */
-  --color-cream:          #FFF6EC;
-  --color-ink:            #1B1030;
 
   /* Text */
   --color-text:           #F7F3FF;
@@ -263,11 +260,11 @@ body {
 /* Glass standard (blur 12px) */
 .glass {
   position: relative;
-  background: rgba(14, 16, 24, 0.72);
+  background: rgba(21, 14, 36, 0.76);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-glass-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.40), inset 0 1px 0 0 rgba(255, 255, 255, 0.10);
 }
 /* Diagonal light-sheen — static, no animation */
 .glass::before {
@@ -275,7 +272,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, transparent 45%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 45%);
   pointer-events: none;
   z-index: 0;
 }
@@ -283,11 +280,11 @@ body {
 /* Glass strong (blur 20px, brighter border) */
 .glass-strong {
   position: relative;
-  background: rgba(14, 16, 24, 0.84);
+  background: rgba(21, 14, 36, 0.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.48), inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
 }
 /* Diagonal light-sheen — static, no animation */
 .glass-strong::before {
@@ -295,7 +292,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, transparent 45%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, transparent 45%);
   pointer-events: none;
   z-index: 0;
 }
@@ -303,19 +300,19 @@ body {
 /* Fallback for browsers that do not support backdrop-filter */
 @supports not (backdrop-filter: blur(1px)) {
   .glass {
-    background: rgba(14, 16, 24, 0.94);
+    background: rgba(21, 14, 36, 0.95);
   }
   .glass-strong {
-    background: rgba(14, 16, 24, 0.98);
+    background: rgba(21, 14, 36, 0.98);
   }
 }
 
 /* Subtle card surface without blur (high performance) */
 .card-surface {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(30, 20, 51, 0.60);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Poster aspect ratio 2:3 */
@@ -518,25 +515,21 @@ body {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding: 10px 4px 16px;
+  padding: 10px 4px 14px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
   -webkit-overflow-scrolling: touch;
 }
 
-.scroll-row::-webkit-scrollbar { height: 5px; }
-.scroll-row::-webkit-scrollbar-track { background: transparent; }
-.scroll-row::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 9999px;
-}
-.scroll-row::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
+.scroll-row::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Edge */
+  width: 0 !important;
+  height: 0 !important;
 }
 
-/* Scroll arrow buttons */
+/* Scroll arrow buttons — positioned inside row edge, vertically centered so they don't cover top-left rating badges */
 .scroll-arrow {
   position: absolute;
   top: 50%;
@@ -568,8 +561,8 @@ body {
   box-shadow: 0 8px 24px rgba(255, 59, 92, 0.45);
 }
 
-.scroll-arrow--left { left: -16px; }
-.scroll-arrow--right { right: -16px; }
+.scroll-arrow--left { left: 8px; }
+.scroll-arrow--right { right: 8px; }
 
 @media (max-width: 768px) {
   .scroll-arrow { display: none !important; }
@@ -1090,69 +1083,67 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────
-   Home Section Row Bands (Alternating styles)
-   Gradient band (15-25% opacity with soft glow)
-   Cream band with ink text
+   Home Section Rows & Alternating Bands
+   Deep jewel-toned dark band & vivid gradient band
+   48px space below every row / band (32px on mobile)
    ───────────────────────────────────────────────────────── */
+.movie-row-section {
+  margin-bottom: 48px;
+  position: relative;
+}
+
+@media (max-width: 640px) {
+  .movie-row-section {
+    margin-bottom: 32px !important;
+  }
+}
+
+.movie-row-section--nested {
+  margin-bottom: 0 !important;
+}
+
+/* Vivid gradient band row container */
 .row-band--gradient {
   position: relative;
   border-radius: 20px;
   padding: 28px 22px;
   margin-bottom: 48px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.18) 0%, rgba(20, 211, 198, 0.14) 50%, rgba(255, 59, 92, 0.16) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.28);
-  box-shadow: 0 14px 40px rgba(139, 92, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.20) 0%, rgba(20, 211, 198, 0.14) 50%, rgba(255, 59, 92, 0.18) 100%),
+              var(--color-surface);
+  border: 1px solid rgba(139, 92, 246, 0.32);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.50),
+              0 0 24px rgba(139, 92, 246, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
-.row-band--cream {
+@media (max-width: 640px) {
+  .row-band--gradient {
+    padding: 20px 14px;
+    margin-bottom: 32px !important;
+  }
+}
+
+/* Deep jewel-toned dark band (e.g. for Top Rated row) */
+.row-band--jewel {
   position: relative;
   border-radius: 20px;
-  padding: 30px 24px;
+  padding: 28px 22px;
   margin-bottom: 48px;
-  background: var(--color-cream);
-  color: var(--color-ink);
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 246, 236, 0.6);
+  /* Violet-to-crimson gradient at 25-35% over --color-surface with 1px border and soft inner glow */
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.30) 0%, rgba(30, 20, 51, 0.85) 50%, rgba(255, 59, 92, 0.28) 100%),
+              var(--color-surface);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.60),
+              0 0 28px rgba(139, 92, 246, 0.16),
+              inset 0 1px 0 rgba(255, 255, 255, 0.18),
+              inset 0 0 24px rgba(139, 92, 246, 0.12);
 }
 
-.row-band--cream .movie-row__header h2 {
-  color: var(--color-ink) !important;
-}
-
-.row-band--cream .movie-row__header a {
-  color: #C81D3D !important;
-  font-weight: 600;
-}
-
-.row-band--cream .movie-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 16, 48, 0.14);
-  box-shadow: 0 6px 20px rgba(27, 16, 48, 0.08);
-}
-
-.row-band--cream .movie-card__title {
-  color: var(--color-ink);
-}
-
-.row-band--cream .movie-card__year {
-  color: #5B4E75;
-}
-
-.row-band--cream .scroll-arrow {
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--color-ink);
-  border-color: rgba(27, 16, 48, 0.2);
-  box-shadow: 0 4px 16px rgba(27, 16, 48, 0.15);
-}
-
-.row-band--cream .scroll-arrow:hover {
-  background: var(--color-ink);
-  color: #FFFFFF;
-  border-color: transparent;
-}
-
-.row-band--cream .scroll-row {
-  scrollbar-color: rgba(27, 16, 48, 0.25) transparent;
+@media (max-width: 640px) {
+  .row-band--jewel {
+    padding: 20px 14px;
+    margin-bottom: 32px !important;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────

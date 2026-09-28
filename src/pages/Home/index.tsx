@@ -175,6 +175,7 @@ export default function HomePage() {
             error={indianError}
             onRetry={() => setIndianRetryKey((k) => k + 1)}
             viewAllTo={`/discover?language=${activeIndianLang}&sortBy=popularity&sortDir=desc`}
+            variant="nested"
           />
         </div>
 
@@ -198,7 +199,7 @@ export default function HomePage() {
           viewAllTo="/discover?sortBy=popularity&sortDir=desc"
         />
 
-        {/* Top Rated — One Cream Light Band with Ink Text */}
+        {/* Top Rated — Deep Jewel Dark Band */}
         <MovieRow
           title="Top Rated"
           movies={topRated.data?.results ?? null}
@@ -206,7 +207,7 @@ export default function HomePage() {
           error={topRated.error}
           onRetry={topRated.refetch}
           viewAllTo="/discover?sortBy=vote_average&sortDir=desc"
-          variant="cream"
+          variant="jewel"
         />
 
         {/* Upcoming — Plain dark row */}

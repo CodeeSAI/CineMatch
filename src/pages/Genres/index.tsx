@@ -83,7 +83,7 @@ export default function GenresPage() {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   padding: '22px 20px',
-                  background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 16, 24, 0.75) 100%)`,
+                  background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.85) 100%)`,
                   border: `1px solid ${colors.border}`,
                   textDecoration: 'none',
                 }}

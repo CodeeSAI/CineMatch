@@ -155,7 +155,7 @@ export default function MovieDetailsPage() {
         style={{
           position: 'relative',
           minHeight: '68vh',
-          background: '#07080D',
+          background: 'var(--color-bg)',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'flex-end',
@@ -197,7 +197,7 @@ export default function MovieDetailsPage() {
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(to bottom, rgba(7, 8, 13, 0.35) 0%, rgba(7, 8, 13, 0.7) 50%, #07080D 100%)',
+              'linear-gradient(to bottom, rgba(11, 7, 20, 0.35) 0%, rgba(11, 7, 20, 0.75) 50%, var(--color-bg) 100%)',
           }}
         />
         <div
@@ -206,7 +206,7 @@ export default function MovieDetailsPage() {
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(109, 124, 255, 0.12), transparent 70%)',
+              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(139, 92, 246, 0.16), transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -251,14 +251,17 @@ export default function MovieDetailsPage() {
               />
             </div>
 
-            {/* Glass info panel */}
+            {/* Dark jewel glass info panel */}
             <div
-              className="glass"
+              className="glass-strong"
               style={{
                 flex: 1,
                 minWidth: 280,
                 padding: '28px 30px',
                 borderRadius: 'var(--radius-card)',
+                background: 'linear-gradient(135deg, rgba(30, 20, 51, 0.88) 0%, rgba(21, 14, 36, 0.94) 100%)',
+                border: '1px solid rgba(139, 92, 246, 0.30)',
+                boxShadow: '0 20px 48px rgba(0, 0, 0, 0.60), 0 0 24px rgba(139, 92, 246, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.14)',
               }}
             >
               <h1
@@ -396,7 +399,7 @@ export default function MovieDetailsPage() {
                 style={{
                   fontSize: 15,
                   lineHeight: 1.7,
-                  color: 'rgba(244, 242, 237, 0.88)',
+                  color: 'var(--color-text)',
                   maxWidth: 720,
                   marginBottom: 24,
                 }}
@@ -454,6 +457,8 @@ export default function MovieDetailsPage() {
                   padding: '16px 20px',
                   borderRadius: 'var(--radius-card)',
                   maxWidth: 520,
+                  background: 'linear-gradient(135deg, rgba(30, 20, 51, 0.70) 0%, rgba(21, 14, 36, 0.85) 100%)',
+                  border: '1px solid rgba(139, 92, 246, 0.25)',
                 }}
               >
                 <div
