@@ -124,52 +124,44 @@ export default function HomePage() {
           />
         )}
 
-        {/* Tabbed Indian Cinema Section (Vivid Gradient Band) */}
-        <div className="row-band--gradient">
-          <div style={{ marginBottom: 16 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                overflowX: 'auto',
-                paddingBottom: 4,
-                scrollbarWidth: 'none',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-sun)',
-                  marginRight: 4,
-                  flexShrink: 0,
-                }}
-              >
-                Indian Cinema:
-              </span>
-              {INDIAN_TABS.map((tab) => {
-                const isActive = activeIndianLang === tab.code
-                return (
-                  <button
-                    key={tab.code}
-                    type="button"
-                    onClick={() => setActiveIndianLang(tab.code)}
-                    className={`quick-chip ${isActive ? 'quick-chip--active' : ''}`}
-                    style={{ flexShrink: 0 }}
-                  >
-                    <span>{tab.label}</span>
-                    <span style={{ fontSize: 11, opacity: 0.8 }}>({tab.native})</span>
-                  </button>
-                )
-              })}
+        {/* Curated Indian Cinema Showcase */}
+        <section className="curated-showcase curated-showcase--indian" aria-label="Indian Cinema Collection">
+          <div className="curated-showcase__ambient-glow" aria-hidden="true" />
+          
+          <div className="curated-showcase__header">
+            <div className="curated-showcase__titles">
+              <div className="curated-showcase__eyebrow">
+                <span className="curated-showcase__dot" />
+                <span>CURATED COLLECTION</span>
+              </div>
+              <h2 className="curated-showcase__title">INDIAN CINEMA</h2>
+            </div>
+
+            {/* Language Selector Glass Tabs */}
+            <div className="curated-showcase__tabs-container">
+              <div className="curated-showcase__tabs" role="tablist" aria-label="Select Indian Cinema Language">
+                {INDIAN_TABS.map((tab) => {
+                  const isActive = activeIndianLang === tab.code
+                  return (
+                    <button
+                      key={tab.code}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setActiveIndianLang(tab.code)}
+                      className={`lang-glass-tab ${isActive ? 'lang-glass-tab--active' : ''}`}
+                    >
+                      <span className="lang-glass-tab__name">{tab.label}</span>
+                      <span className="lang-glass-tab__native">{tab.native}</span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
           <MovieRow
-            title={`${INDIAN_TABS.find((t) => t.code === activeIndianLang)?.label} Cinema`}
+            title={`${INDIAN_TABS.find((t) => t.code === activeIndianLang)?.label} Spotlight`}
             movies={indianMovies}
             loading={indianLoading}
             error={indianError}
@@ -177,7 +169,7 @@ export default function HomePage() {
             viewAllTo={`/discover?language=${activeIndianLang}&sortBy=popularity&sortDir=desc`}
             variant="nested"
           />
-        </div>
+        </section>
 
         {/* Trending — Plain dark row */}
         <MovieRow

@@ -153,7 +153,7 @@ export default function GenreMoviesPage() {
             padding: '32px 28px',
             marginBottom: 32,
             border: `1px solid ${colors.border}`,
-            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.90) 100%)`,
+            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.90) 100%)`,
             overflow: 'hidden',
           }}
         >
@@ -185,7 +185,7 @@ export default function GenreMoviesPage() {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: `linear-gradient(to right, rgba(11, 7, 20, 0.94) 0%, rgba(11, 7, 20, 0.80) 55%, rgba(11, 7, 20, 0.65) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.85) 100%)`,
+                  background: `linear-gradient(to right, rgba(5, 6, 11, 0.94) 0%, rgba(5, 6, 11, 0.80) 55%, rgba(5, 6, 11, 0.65) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.85) 100%)`,
                   pointerEvents: 'none',
                   zIndex: 1,
                 }}

@@ -5,25 +5,23 @@ CineMatch is a movie discovery and personal tracking web application built with 
 
 ---
 
-## Design System & Aesthetics ("Cinema Neon" Vibrant & Animated)
-The entire site adheres to a vivid, animated, and premium "Cinema Neon" aesthetic:
-- **Base Palette**: Dark plum background (`#0B0714`), surface (`#150E24`), surface-2 (`#1E1433`), text (`#F7F3FF`), muted labels (`#B4AACB`).
-- **Cinema Neon Accents**: Crimson (`#FF3B5C`), Coral (`#FF7A45`), Sun Amber (`#FFC533`), Violet (`#8B5CF6`), Teal (`#14D3C6`), Sky (`#38BDF8`), Mint (`#4ADE80`), and Neon Pink (`#FF5FA2`).
-- **Deep Jewel Surfaces**: Jewel-toned dark bands (`.row-band--jewel`, e.g. violet-to-crimson gradient at 25–35% over `--color-surface` with 1px border and soft inner glow) and frosted glass panels matching the dark plum palette.
+## Design System & Aesthetics ("Cinematic Blue & Crimson")
+The application adheres to a dark, cinematic, and movie-first streaming aesthetic:
+- **Base Palette**: Deep black/midnight navy background (`#05060B`), midnight slate surface (`#090B14`), elevated surface (`#0E111C`, `#141827`), card background (`#0D101B`), crisp white text (`#F8FAFC`), muted labels (`#A7ADBC`), subtle captions (`#697184`).
+- **Cinematic Accents**: Royal Blue (`#3B82F6` / `#2563EB`) and Crimson Red (`#EF4444` / `#DC2626`) applied with restraint for atmospheric lighting, focus rings, hover glows, and active indicators.
+- **Frosted Glass Utilities**: Applied to the floating sticky navbar, mobile drawer, hero info panel, and card info overlays with `backdrop-filter: blur(16px–24px)` and subtle 1px translucent borders (`rgba(255, 255, 255, 0.09)`).
 - **Gradient Tokens**:
-  - `--grad-hot`: Crimson → Coral → Sun (`#FF3B5C` → `#FF7A45` → `#FFC533`)
-  - `--grad-cool`: Violet → Sky → Teal (`#8B5CF6` → `#38BDF8` → `#14D3C6`)
-  - `--grad-candy`: Pink → Violet (`#FF5FA2` → `#8B5CF6`)
-  - `--grad-fresh`: Teal → Mint (`#14D3C6` → `#4ADE80`)
-- **Genre Color Mapping (`src/lib/genreColors.ts`)**: 16 primary movie genres mapped to distinct cinema neon accents, backgrounds, borders, gradients, and card glow shadows.
-- **Ambient Drifting Background**: Fixed background layer of 4 soft color blobs (violet, crimson, teal, sun) drifting slowly (transform only, 30–40s loops), paused below 768px and under `prefers-reduced-motion`. No backdrop-filter on this layer.
-- **Typography & Gradient Text**: Google Fonts `"Fraunces"` serif for expressive display headings and `"DM Sans"` for UI. Animated `.gradient-text` (8s loop) for titles and hero.
-- **Alternating Home Sections**: Dark rows, a vivid gradient band (Indian Cinema), and a deep jewel-toned dark band (Top Rated) with 48px spacing (32px on mobile) and hidden native scrollbars.
-- **Interactive Navbar**: Floating glass bar with sliding gradient underline on hover/active, logo shimmer every 6s, gradient count badges, gradient avatar ring, and staggered mobile drawer items.
-- **High-Performance MovieCard**: Strictly NO backdrop-filter. 6px lift, 1.05 poster zoom, first-genre glow shadow, gradient hover overlay, gradient rating badge, heart pop + ring burst on favorite, bookmark bounce, and viewport-staggered entrance.
-- **Trending Hero Carousel**: 3 slides, 8s auto-rotation (paused on hover and reduced motion), Ken Burns backdrop zoom, animated gradient glow border on info panel, staggered content slide-ins, and active dot time progress fill.
-- **Motion Kit (`src/hooks/useInView.ts` + `src/index.css`)**: IntersectionObserver `.reveal` (fade + translateY 16px) with CSS `--i` stagger, button hover shine sweep, press scale 0.97, tinted shimmer skeletons, and 250ms page transitions. All decorative motion respects `prefers-reduced-motion`.
-- **Frosted Glass Utilities**: Blur reserved for structural persistent surfaces (navbar, mobile drawer, hero info panel, modal). Visible `:focus-visible` rings with Sun Amber contrast.
+  - `--grad-hot`: Deep Blue → Crimson accent (`#2563EB` → `#1D4ED8` → `#DC2626`)
+  - `--grad-cool`: Subdued Blue Glass (`rgba(59, 130, 246, 0.18)` → `rgba(239, 68, 68, 0.08)`)
+  - `--grad-blue`: Royal Blue (`#3B82F6` → `#1D4ED8`)
+  - `--grad-red`: Crimson Red (`#EF4444` → `#B91C1C`)
+- **Ambient Drifting Background**: Fixed background layer with soft blurred blue (`rgba(37, 99, 235, 0.07)`) and crimson (`rgba(220, 38, 38, 0.065)`) atmospheric lighting drifting slowly (transform only, 38–42s loops), paused below 768px and under `prefers-reduced-motion`.
+- **Interactive Navbar**: Floating translucent glass bar with subtle blue/crimson gradient underline on active links, expanded search input with `"Search for films, directors, actors..."` placeholder and blue focus glow, favorites/watchlist badges, and avatar.
+- **Cinematic Hero (`HeroSection`)**: Integrated seamlessly into the backdrop artwork without boxy floating panels. Utilizes 3-stage dark scrim gradients (vertical, horizontal, and subtle blue/crimson radial atmospheric light). Features Flame `TRENDING #1` eyebrow badge, Fraunces editorial title, refined gold star rating badge, gradient primary "Watch Now" button, dark glass watchlist toggle, left/right slide arrows, and auto-rotation progress tracks.
+- **Image-First Streaming Card (`StreamCard` / `MovieCard`)**: Fully redesigned 16px border-radius streaming card where high-resolution poster artwork dominates. Features floating glass gold star rating badge, hover scrim overlay, centered quick-action Play button, top-right heart pop and watchlist bounce action buttons, and clean single-line metadata (`2024 • Action`) with contextual recommendation badge.
+- **Movie Rows (`MovieRow`)**: Smooth horizontal snap-scrolling strip with responsive card widths revealing a partial peek of the next card on desktop and mobile. Animated "View all →" header link with slide-on-hover arrow.
+- **Curated Indian Cinema Showcase**: Replaced basic filter box with a luxury curated collection section featuring an atmospheric ambient glow, Fraunces headline, and compact glass language tabs (Hindi, Tamil, Telugu, Malayalam, Kannada) with glowing active borders.
+- **Pages Overhaul**: Uniform integration of `.stream-card` across Discover, Search, Genres, Favorites, Watchlist, and Profile pages. All TMDB API data connections, local storage, rating, and filtering behaviors strictly preserved.
 
 ---
 

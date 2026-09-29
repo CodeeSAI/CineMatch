@@ -185,7 +185,7 @@ export default function MovieDetailsPage() {
               height: '100%',
               objectFit: 'cover',
               objectPosition: 'center 20%',
-              opacity: 0.32,
+              opacity: 0.50,
             }}
           />
         )}
@@ -197,7 +197,7 @@ export default function MovieDetailsPage() {
             position: 'absolute',
             inset: 0,
             background:
-              'linear-gradient(to bottom, rgba(11, 7, 20, 0.35) 0%, rgba(11, 7, 20, 0.75) 50%, var(--color-bg) 100%)',
+              'linear-gradient(to bottom, rgba(5, 6, 11, 0.20) 0%, rgba(5, 6, 11, 0.65) 50%, var(--color-bg) 100%)',
           }}
         />
         <div
@@ -206,7 +206,7 @@ export default function MovieDetailsPage() {
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(139, 92, 246, 0.16), transparent 70%)',
+              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(37, 99, 235, 0.12), transparent 70%), radial-gradient(ellipse 70% 50% at 85% 30%, rgba(220, 38, 38, 0.08), transparent 60%)',
             pointerEvents: 'none',
           }}
         />

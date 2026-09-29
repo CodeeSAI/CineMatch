@@ -83,24 +83,10 @@ export function MovieRow({
         {viewAllTo && (
           <Link
             to={viewAllTo}
-            style={{
-              fontSize: 13,
-              fontWeight: 600,
-              color: 'var(--color-crimson)',
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              transition: 'opacity var(--duration-fast)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.opacity = '0.8'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.opacity = '1'
-            }}
+            className="movie-row__view-all"
           >
-            View all →
+            <span>View all</span>
+            <span className="movie-row__view-all-arrow">→</span>
           </Link>
         )}
       </div>

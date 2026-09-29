@@ -158,7 +158,7 @@ export function Navbar() {
               role="search"
               aria-label="Quick search"
               className="hidden-mobile"
-              style={{ position: 'relative', width: 190 }}
+              style={{ position: 'relative', width: 250 }}
             >
               <Search
                 size={14}
@@ -173,7 +173,7 @@ export function Navbar() {
               />
               <input
                 type="search"
-                placeholder="Search movies…"
+                placeholder="Search for films, directors, actors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -189,10 +189,10 @@ export function Navbar() {
                   transition: 'all var(--duration-fast) ease',
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--color-accent)'
-                  e.currentTarget.style.background = 'rgba(21, 14, 36, 0.95)'
+                  e.currentTarget.style.borderColor = 'var(--color-blue)'
+                  e.currentTarget.style.background = 'rgba(14, 17, 28, 0.95)'
                   e.currentTarget.style.boxShadow =
-                    '0 0 0 3px rgba(255, 59, 92, 0.25)'
+                    '0 0 0 3px rgba(59, 130, 246, 0.25)'
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = 'var(--color-glass-border)'
