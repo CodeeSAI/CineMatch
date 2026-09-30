@@ -17,6 +17,7 @@ const ERROR_ICONS: Record<string, ElementType> = {
   MISSING_KEY: KeyRound,
   INVALID_KEY: KeyRound,
   RATE_LIMIT: Clock,
+  TIMEOUT: Clock,
   NETWORK: WifiOff,
   NOT_FOUND: Film,
   GENERIC: AlertCircle,
@@ -39,9 +40,15 @@ export function ErrorState({
   let message = description || error.message
 
   if (!heading) {
-    if (isOffline || effectiveType === 'NETWORK') {
+    if (isOffline) {
       heading = "You're Offline"
       message = message || "Check your internet connection and try again."
+    } else if (effectiveType === 'TIMEOUT') {
+      heading = 'Request Timed Out'
+      message = message || 'The server took too long to respond. Please try again.'
+    } else if (effectiveType === 'NETWORK') {
+      heading = 'Connection Error'
+      message = message || 'Unable to reach the movie service. Please check your network or try again.'
     } else if (effectiveType === 'RATE_LIMIT') {
       heading = 'Too Many Requests'
       message = message || 'TMDB rate limit reached. Please wait a moment and try again.'
@@ -68,17 +75,19 @@ export function ErrorState({
           alignItems: 'center',
           gap: 12,
           color: 'var(--color-muted)',
-          padding: '14px 18px',
+          padding: '12px 14px',
           borderRadius: 'var(--radius-card)',
           background: 'rgba(255, 255, 255, 0.03)',
           border: '1px solid rgba(239, 68, 68, 0.22)',
           fontSize: 13,
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         <Icon size={16} color="#F87171" style={{ flexShrink: 0 }} />
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{heading}: </span>
-          <span>{message}</span>
+          <span style={{ wordBreak: 'break-word' }}>{message}</span>
         </div>
         {onRetry && (
           <button
@@ -86,17 +95,20 @@ export function ErrorState({
             onClick={onRetry}
             className="btn-glass"
             style={{
-              padding: '4px 12px',
+              padding: '6px 14px',
+              minHeight: 44,
               fontSize: 12,
               borderRadius: 'var(--radius-btn)',
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 6,
               cursor: 'pointer',
               color: 'var(--color-text)',
+              flexShrink: 0,
             }}
           >
-            <RotateCcw size={12} />
+            <RotateCcw size={13} />
             <span>Retry</span>
           </button>
         )}
@@ -114,18 +126,20 @@ export function ErrorState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '72px 24px',
-        gap: 20,
+        padding: '48px 16px',
+        gap: 18,
         textAlign: 'center',
         color: 'var(--color-muted)',
         maxWidth: 520,
         margin: '0 auto',
+        width: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <div
         style={{
-          width: 68,
-          height: 68,
+          width: 56,
+          height: 56,
           borderRadius: '50%',
           background: isOffline ? 'rgba(239, 68, 68, 0.12)' : 'rgba(59, 130, 246, 0.12)',
           border: `1px solid ${isOffline ? 'rgba(239, 68, 68, 0.3)' : 'rgba(59, 130, 246, 0.25)'}`,
@@ -136,7 +150,7 @@ export function ErrorState({
           boxShadow: '0 8px 24px rgba(0, 0, 0, 0.40)',
         }}
       >
-        <Icon size={32} strokeWidth={1.5} />
+        <Icon size={28} strokeWidth={1.5} />
       </div>
 
       <div>
@@ -145,7 +159,7 @@ export function ErrorState({
             fontFamily: 'var(--font-display)',
             fontWeight: 700,
             color: 'var(--color-text)',
-            fontSize: 22,
+            fontSize: 20,
             marginBottom: 8,
           }}
         >
@@ -164,9 +178,11 @@ export function ErrorState({
             className="btn-primary"
             style={{
               padding: '10px 22px',
+              minHeight: 44,
               fontSize: 14,
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 8,
               cursor: 'pointer',
             }}
@@ -182,10 +198,12 @@ export function ErrorState({
             className="btn-glass"
             style={{
               padding: '10px 20px',
+              minHeight: 44,
               fontSize: 14,
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
+              justifyContent: 'center',
               gap: 8,
             }}
           >

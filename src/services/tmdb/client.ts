@@ -192,8 +192,8 @@ export async function tmdbFetch<T>(
           }
 
           if (err instanceof DOMException && err.name === 'AbortError') {
-            // Internal 10s timeout occurred
-            throw new ApiError('NETWORK', 'Request timed out. Please check your network connection.')
+            // Internal 10s timeout occurred while device might be online
+            throw new ApiError('TIMEOUT', 'Request timed out. The server took too long to respond.')
           }
 
           lastError = err
@@ -205,13 +205,18 @@ export async function tmdbFetch<T>(
             continue
           }
 
-          throw new ApiError('NETWORK', 'Network request failed. Check your internet connection.')
+          const isOff = typeof navigator !== 'undefined' && !navigator.onLine
+          if (isOff) {
+            throw new ApiError('NETWORK', 'Network connection lost. Please check your internet connection.')
+          }
+          throw new ApiError('GENERIC', 'Unable to reach the movie service. Please try again.')
         }
       }
 
+      const isOff = typeof navigator !== 'undefined' && !navigator.onLine
       throw lastError instanceof ApiError
         ? lastError
-        : new ApiError('NETWORK', 'Request failed after retries.')
+        : new ApiError(isOff ? 'NETWORK' : 'GENERIC', isOff ? 'Network connection lost.' : 'Request failed after retries.')
     })()
 
     inFlightRequests.set(cacheKey, fetchPromise)

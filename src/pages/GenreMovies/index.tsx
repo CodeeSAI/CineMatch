@@ -33,7 +33,7 @@ export default function GenreMoviesPage() {
   const pageTitle = genreName ? `${genreName} Movies` : 'Genre Movies'
   const colors = getGenreColor(genreName)
 
-  const isOnline = useNetworkStatus()
+  const { isOnline } = useNetworkStatus()
 
   const [movies, setMovies] = useState<TMDBMovie[]>([])
   const [page, setPage] = useState(1)

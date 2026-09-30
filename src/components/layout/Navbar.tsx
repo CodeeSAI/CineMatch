@@ -52,26 +52,22 @@ export function Navbar() {
     <>
       {/* Sticky container providing the floating gap from top */}
       <div
+        className="navbar-container"
         style={{
           position: 'sticky',
           top: 0,
           zIndex: 40,
-          padding: '16px 24px 8px',
           width: '100%',
           pointerEvents: 'none',
         }}
       >
         <header
-          className={scrolled ? 'glass-strong' : 'glass'}
+          className={`navbar-header ${scrolled ? 'glass-strong' : 'glass'}`}
           style={{
-            maxWidth: 1400,
-            margin: '0 auto',
             borderRadius: 16,
-            height: 64,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 24px',
             pointerEvents: 'auto',
             background: scrolled
               ? 'rgba(10, 12, 18, 0.85)'
@@ -342,9 +338,18 @@ export function Navbar() {
               onClick={() => navigate('/search')}
               aria-label="Search"
               className="btn-icon show-mobile"
-              style={{ display: 'none' }}
+              style={{
+                display: 'none',
+                width: 44,
+                height: 44,
+                minWidth: 44,
+                minHeight: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+              }}
             >
-              <Search size={18} />
+              <Search size={19} />
             </button>
 
             {/* Mobile Hamburger Button */}
@@ -354,9 +359,18 @@ export function Navbar() {
               aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
               className="btn-icon show-mobile"
-              style={{ display: 'none' }}
+              style={{
+                display: 'none',
+                width: 44,
+                height: 44,
+                minWidth: 44,
+                minHeight: 44,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+              }}
             >
-              <Menu size={20} />
+              <Menu size={22} />
             </button>
           </div>
         </header>
@@ -366,7 +380,25 @@ export function Navbar() {
 
       {/* Show/Hide responsive helper and custom active nav styling */}
       <style>{`
+        .navbar-container {
+          padding: 16px 24px 8px;
+        }
+        .navbar-header {
+          max-width: 1400px;
+          margin: 0 auto;
+          height: 64px;
+          padding: 0 24px;
+        }
         @media (max-width: 768px) {
+          .navbar-container {
+            padding: 0 !important;
+          }
+          .navbar-header {
+            width: calc(100% - 24px) !important;
+            margin: 12px auto !important;
+            height: 64px !important;
+            padding: 0 16px !important;
+          }
           .hidden-mobile { display: none !important; }
           .show-mobile   { display: inline-flex !important; }
         }

@@ -34,6 +34,7 @@ export type ApiErrorType =
   | 'INVALID_KEY'
   | 'RATE_LIMIT'
   | 'NETWORK'
+  | 'TIMEOUT'
   | 'GENERIC'
 
 export class ApiError extends Error {

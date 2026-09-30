@@ -137,13 +137,7 @@ export default function HomePage() {
       )}
 
       {/* ── Movie rows ────────────────────────────────────── */}
-      <div
-        style={{
-          maxWidth: 1400,
-          margin: '0 auto',
-          padding: '64px 48px 0',
-        }}
-      >
+      <div className="home-sections-container">
         {/* Recommendation Row — hidden if nothing is saved */}
         {recommendations && recommendations.movies.length > 0 && (
           <MovieRow

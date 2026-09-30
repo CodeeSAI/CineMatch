@@ -69,6 +69,7 @@ export function MovieRow({
         }}
       >
         <h2
+          className="movie-row__title"
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 28,
@@ -105,7 +106,7 @@ export function MovieRow({
         </div>
       )}
 
-      {error && !loading && (
+      {error && !loading && (typeof navigator === 'undefined' || navigator.onLine) && (
         <ErrorState error={error} onRetry={onRetry} compact />
       )}
 

@@ -196,9 +196,11 @@ export function HeroSection({ movies }: Props) {
                   onClick={() => setIndex(i)}
                   aria-label={`Go to slide ${i + 1}: ${m.title}`}
                   aria-current={i === index ? 'true' : 'false'}
-                  className={`hero-progress-track ${i === index ? 'active hero-dot-active' : ''}`}
+                  className={`hero-progress-btn ${i === index ? 'active' : ''}`}
                 >
-                  {i === index && <span key={`progress-${index}`} className="hero-dot-progress-bar" />}
+                  <span className={`hero-progress-track ${i === index ? 'active hero-dot-active' : ''}`}>
+                    {i === index && <span key={`progress-${index}`} className="hero-dot-progress-bar" />}
+                  </span>
                 </button>
               ))}
             </div>

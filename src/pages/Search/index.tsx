@@ -36,7 +36,7 @@ export default function SearchPage() {
   const [input, setInput] = useState(initialQuery)
   const debouncedQuery = useDebounce(input.trim(), DEBOUNCE_MS)
 
-  const isOnline = useNetworkStatus()
+  const { isOnline } = useNetworkStatus()
 
   const [movies, setMovies] = useState<TMDBMovie[]>([])
   const [page, setPage] = useState(1)
@@ -224,9 +224,9 @@ export default function SearchPage() {
                 onClick={handleClear}
                 className="btn-icon"
                 aria-label="Clear search input"
-                style={{ width: 34, height: 34, flexShrink: 0 }}
+                style={{ width: 44, height: 44, minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
               >
-                <X size={15} />
+                <X size={16} />
               </button>
             )}
           </div>

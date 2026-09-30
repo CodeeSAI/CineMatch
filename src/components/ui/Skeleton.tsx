@@ -59,24 +59,17 @@ export function SkeletonHero() {
       <div
         className="hero-cinematic"
         style={{
-          width: '100%',
-          minHeight: 560,
-          display: 'flex',
-          alignItems: 'flex-end',
-          padding: '40px 32px 52px',
           background: '#07080D',
           position: 'relative',
         }}
       >
         <div
+          className="hero-cinematic__content"
           style={{
-            maxWidth: 620,
-            width: '100%',
-            position: 'relative',
             zIndex: 2,
             display: 'flex',
             flexDirection: 'column',
-            gap: 14,
+            gap: 12,
           }}
         >
           {/* Eyebrow badge skeleton */}

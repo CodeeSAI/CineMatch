@@ -29,13 +29,17 @@ export function BackButton({ fallback = '/' }: Props) {
       aria-label="Go back"
       className="btn-icon"
       style={{
-        /* keep it small and unobtrusive */
-        width: 36,
-        height: 36,
+        width: 44,
+        height: 44,
+        minWidth: 44,
+        minHeight: 44,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         flexShrink: 0,
       }}
     >
-      <ArrowLeft size={17} />
+      <ArrowLeft size={18} />
     </button>
   )
 }

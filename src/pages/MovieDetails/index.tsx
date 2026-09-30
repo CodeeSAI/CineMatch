@@ -38,7 +38,7 @@ export default function MovieDetailsPage() {
   const { id } = useParams<{ id: string }>()
   const movieId = Number(id)
 
-  const isOnline = useNetworkStatus()
+  const { isOnline } = useNetworkStatus()
 
   const {
     isFavorite,
@@ -307,6 +307,7 @@ export default function MovieDetailsPage() {
         >
 
           <div
+            className="movie-details__hero-content"
             style={{
               display: 'flex',
               gap: 36,
@@ -316,6 +317,7 @@ export default function MovieDetailsPage() {
           >
             {/* Poster with deep shadow */}
             <div
+              className="movie-details__poster-wrap"
               style={{
                 width: 250,
                 maxWidth: '100%',
@@ -336,7 +338,7 @@ export default function MovieDetailsPage() {
 
             {/* Dark jewel glass info panel */}
             <div
-              className="glass-strong"
+              className="glass-strong movie-details__info-panel"
               style={{
                 flex: 1,
                 minWidth: 280,
