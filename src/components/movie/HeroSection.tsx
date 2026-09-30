@@ -82,7 +82,7 @@ export function HeroSection({ movies }: Props) {
         {/* Full-bleed Backdrop with Subtle Ken Burns Zoom */}
         {backdrop && !imgFailed ? (
           <img
-            key={movie.id}
+            key={`backdrop-${movie.id}`}
             src={backdrop}
             alt=""
             aria-hidden="true"
@@ -122,7 +122,7 @@ export function HeroSection({ movies }: Props) {
         )}
 
         {/* Content sitting seamlessly over the cinematic artwork */}
-        <div className="hero-cinematic__content" key={movie.id}>
+        <div className="hero-cinematic__content" key={`content-${movie.id}`}>
           {/* Eyebrow Label */}
           <div className="hero-stagger-1 hero-eyebrow-badge">
             <Flame size={12} color="#EF4444" fill="#EF4444" />
@@ -144,8 +144,8 @@ export function HeroSection({ movies }: Props) {
             <span className="hero-meta-dot">•</span>
             <span className="hero-meta-year">{year}</span>
 
-            {genreNames.map((name) => (
-              <span key={name} className="hero-genre-pill">
+            {genreNames.map((name, idx) => (
+              <span key={`${name}-${idx}`} className="hero-genre-pill">
                 {name}
               </span>
             ))}
@@ -191,7 +191,7 @@ export function HeroSection({ movies }: Props) {
             <div className="hero-cinematic__progress">
               {items.map((m, i) => (
                 <button
-                  key={m.id}
+                  key={`${m.id}-${i}`}
                   type="button"
                   onClick={() => setIndex(i)}
                   aria-label={`Go to slide ${i + 1}: ${m.title}`}

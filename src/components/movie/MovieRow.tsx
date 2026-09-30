@@ -134,7 +134,7 @@ export function MovieRow({
           {/* Horizontal Scroll Strip with Scroll-Snap */}
           <div ref={rowRef} className="scroll-row">
             {movies.map((movie, idx) => (
-              <div key={movie.id} className="movie-row__card">
+              <div key={`${movie.id}-${idx}`} className="movie-row__card">
                 <MovieCard movie={movie} reason={movie.reason} index={idx} />
               </div>
             ))}

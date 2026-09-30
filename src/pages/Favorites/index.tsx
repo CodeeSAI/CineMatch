@@ -130,9 +130,9 @@ export default function FavoritesPage() {
           />
         ) : (
           <div className="movie-grid">
-            {sortedFavorites.map((movie) => (
+            {sortedFavorites.map((movie, idx) => (
               <div
-                key={movie.id}
+                key={`${movie.id}-${idx}`}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',

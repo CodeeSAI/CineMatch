@@ -760,9 +760,9 @@ export default function MovieDetailsPage() {
               paddingBottom: 16,
             }}
           >
-            {cast.map((member) => (
+            {cast.map((member, idx) => (
               <div
-                key={member.id}
+                key={`${member.id}-${idx}`}
                 className="glass"
                 style={{
                   flex: '0 0 140px',

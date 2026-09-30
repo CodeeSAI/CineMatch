@@ -130,9 +130,9 @@ export default function WatchlistPage() {
           />
         ) : (
           <div className="movie-grid">
-            {sortedWatchlist.map((movie) => (
+            {sortedWatchlist.map((movie, idx) => (
               <div
-                key={movie.id}
+                key={`${movie.id}-${idx}`}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',

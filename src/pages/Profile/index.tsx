@@ -433,9 +433,9 @@ export default function ProfilePage() {
             />
           ) : (
             <div className="movie-grid">
-              {last12Recent.map((movie) => (
+              {last12Recent.map((movie, idx) => (
                 <Link
-                  key={movie.id}
+                  key={`${movie.id}-${idx}`}
                   to={`/movie/${movie.id}`}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
