@@ -16,22 +16,29 @@ import { MovieRow } from '../../components/movie/MovieRow'
 import { GenreTag } from '../../components/ui/GenreTag'
 import { ImageWithFallback } from '../../components/ui/ImageWithFallback'
 import { ErrorState } from '../../components/ui/ErrorState'
-import { SkeletonHero } from '../../components/ui/Skeleton'
+import { OfflineState } from '../../components/ui/OfflineState'
+import { EmptyState } from '../../components/ui/EmptyState'
+import { SkeletonDetails } from '../../components/ui/Skeleton'
+import { SlowNetworkNotice } from '../../components/ui/SlowNetworkNotice'
 import { BackButton } from '../../components/ui/BackButton'
 import { useLibrary } from '../../context/LibraryContext'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
+import { useSlowNetwork } from '../../hooks/useSlowNetwork'
 import { getMovieDetails } from '../../services/tmdb/movies'
 import { posterUrl, backdropUrl, profileUrl } from '../../services/tmdb/images'
 import { formatRuntime, formatDate, formatRating, formatCount } from '../../lib/format'
 import { detailToSavedMovie } from '../../lib/movie'
 import { getLanguageName } from '../../lib/languages'
 import type { TMDBMovieDetail } from '../../services/tmdb/types'
-import type { StarRating, ApiError } from '../../types'
+import { ApiError, type StarRating } from '../../types'
 
 const STAR_VALUES: StarRating[] = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]
 
 export default function MovieDetailsPage() {
   const { id } = useParams<{ id: string }>()
   const movieId = Number(id)
+
+  const isOnline = useNetworkStatus()
 
   const {
     isFavorite,
@@ -48,16 +55,41 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState<TMDBMovieDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<ApiError | null>(null)
+  const [isNotFound, setIsNotFound] = useState(false)
   const [playTrailer, setPlayTrailer] = useState(false)
   const [retryKey, setRetryKey] = useState(0)
 
+  // Track slow network
+  const isSlow = useSlowNetwork(loading, 3500)
+
+  // Auto-retry when coming back online
+  useEffect(() => {
+    if (isOnline && error && error.type === 'NETWORK') {
+      setError(null)
+      setIsNotFound(false)
+      setRetryKey((k) => k + 1)
+    }
+  }, [isOnline, error])
+
   // Fetch full details with credits, videos, similar, recommendations
   useEffect(() => {
-    if (!movieId) return
+    if (!movieId) {
+      setLoading(false)
+      setIsNotFound(true)
+      return
+    }
+
+    if (!navigator.onLine) {
+      setLoading(false)
+      setError(new ApiError('NETWORK', 'You are currently offline. Please check your internet connection.'))
+      return
+    }
+
     const controller = new AbortController()
 
     setLoading(true)
     setError(null)
+    setIsNotFound(false)
     setPlayTrailer(false)
 
     getMovieDetails(movieId, controller.signal)
@@ -69,20 +101,29 @@ export default function MovieDetailsPage() {
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
-        setError(
-          err instanceof Error
-            ? (err as ApiError)
-            : ({ type: 'GENERIC', message: String(err) } as ApiError),
-        )
+        const isOffline = !navigator.onLine || (err instanceof TypeError && err.message.toLowerCase().includes('failed to fetch'))
+        const msg = err instanceof Error ? err.message : String(err)
+        const is404 = msg.includes('404') || msg.toLowerCase().includes('not found') || (err && typeof err === 'object' && ('status' in err && (err as { status: number }).status === 404))
+        if (isOffline) {
+          setError(new ApiError('NETWORK', 'Network connection lost.'))
+        } else if (is404) {
+          setIsNotFound(true)
+        } else {
+          setError(
+            err instanceof ApiError
+              ? err
+              : new ApiError('GENERIC', msg),
+          )
+        }
         setLoading(false)
       })
 
     return () => controller.abort()
   }, [movieId, retryKey, recordView])
 
-  const fav = isFavorite(movieId)
-  const wl = isInWatchlist(movieId)
-  const userRating = getRating(movieId)
+  const fav = movieId ? isFavorite(movieId) : false
+  const wl = movieId ? isInWatchlist(movieId) : false
+  const userRating = movieId ? getRating(movieId) : 0
 
   // Find official trailer or best teaser
   const trailer =
@@ -122,20 +163,62 @@ export default function MovieDetailsPage() {
 
   if (loading) {
     return (
-      <Layout title="Movie">
-        <SkeletonHero />
+      <Layout title="Loading Movie…">
+        <div className="page-container" style={{ paddingTop: 24 }}>
+          {isSlow && (
+            <div style={{ marginBottom: 20 }}>
+              <SlowNetworkNotice message="Still loading movie details…" />
+            </div>
+          )}
+          <SkeletonDetails />
+        </div>
+      </Layout>
+    )
+  }
+
+  const isOfflineError = !isOnline || (error && error.type === 'NETWORK')
+
+  if (isOfflineError) {
+    return (
+      <Layout title="Offline">
+        <div style={{ padding: '80px 24px', maxWidth: 600, margin: '0 auto' }}>
+          <OfflineState
+            onRetry={() => {
+              setError(null)
+              setIsNotFound(false)
+              setRetryKey((k) => k + 1)
+            }}
+          />
+        </div>
+      </Layout>
+    )
+  }
+
+  if (isNotFound || (!movie && !error)) {
+    return (
+      <Layout title="Movie Not Found">
+        <div style={{ padding: '80px 24px', maxWidth: 600, margin: '0 auto' }}>
+          <EmptyState
+            title="Movie Not Found"
+            description="The film you are looking for does not exist or may have been removed."
+            actionLabel="Browse Movies"
+            actionLink="/discover"
+          />
+        </div>
       </Layout>
     )
   }
 
   if (error || !movie) {
     return (
-      <Layout title="Movie">
+      <Layout title="Error">
         <div style={{ padding: '80px 24px', maxWidth: 600, margin: '0 auto' }}>
           <ErrorState
-            error={error ?? ({ type: 'GENERIC', message: 'Movie not found' } as ApiError)}
+            title="Couldn't Load Movie"
+            error={error ?? new ApiError('GENERIC', 'Unable to load movie details.')}
             onRetry={() => {
               setError(null)
+              setIsNotFound(false)
               setRetryKey((k) => k + 1)
             }}
           />

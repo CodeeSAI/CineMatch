@@ -123,17 +123,10 @@ export default function FavoritesPage() {
         {favorites.length === 0 ? (
           <EmptyState
             icon={<Heart size={48} strokeWidth={1.2} />}
-            title="No favourites yet"
-            description="Explore our catalog and click the heart icon on films you love to save them here."
-            action={
-              <Link
-                to="/discover"
-                className="btn-primary"
-                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-              >
-                Browse movies
-              </Link>
-            }
+            title="No favorites yet"
+            description="Discover a movie you love and save it here to build your personal cinema collection."
+            actionLabel="Discover Movies"
+            actionLink="/discover"
           />
         ) : (
           <div className="movie-grid">

@@ -69,17 +69,18 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
   return (
     <div
       ref={ref}
-      className={`reveal ${isInView ? 'is-in-view' : ''}`}
+      className={`reveal ${isInView ? 'is-in-view' : ''} movie-card-cell`}
       style={{ '--i': index % 10 } as React.CSSProperties}
     >
       <Link
         to={`/movie/${movie.id}`}
         aria-label={`${movie.title} (${year})`}
-        style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+        className="movie-card-link"
+        style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <article className="stream-card">
+        <article className="stream-card movie-card">
           {/* ── 2:3 Cinematic Poster Media Container ── */}
-          <div className="stream-card__media poster-ratio">
+          <div className="stream-card__media movie-card__poster poster-ratio">
             <ImageWithFallback
               src={poster}
               alt={`${movie.title} poster`}
@@ -87,7 +88,7 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
             />
 
             {/* Top-Left: Glass Rating Badge */}
-            <div className="stream-card__rating" aria-label={`Rating: ${rating} out of 10`}>
+            <div className="stream-card__rating movie-card__rating-badge" aria-label={`Rating: ${rating} out of 10`}>
               <Star size={11} fill="currentColor" strokeWidth={0} />
               <span>{rating}</span>
             </div>
@@ -100,7 +101,7 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
             )}
 
             {/* Hover Scrim Overlay */}
-            <div className="stream-card__scrim" aria-hidden="true" />
+            <div className="stream-card__scrim movie-card__overlay" aria-hidden="true" />
 
             {/* Centered Quick Action Play Button */}
             <div className="stream-card__play-wrap" aria-hidden="true">
@@ -110,13 +111,13 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
             </div>
 
             {/* Top-Right: Quick Action Buttons (Favorite & Watchlist) */}
-            <div className="stream-card__actions">
+            <div className="stream-card__actions movie-card__actions">
               <button
                 type="button"
                 onClick={handleFav}
                 aria-label={fav ? `Remove ${movie.title} from favourites` : `Add ${movie.title} to favourites`}
                 aria-pressed={fav}
-                className={`stream-card__btn ${fav ? 'stream-card__btn--active-rose' : ''} ${
+                className={`stream-card__btn movie-card__btn ${fav ? 'stream-card__btn--active-rose' : ''} ${
                   heartPopping ? 'animate-heart-pop' : ''
                 }`}
               >
@@ -128,7 +129,7 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
                 onClick={handleWl}
                 aria-label={wl ? `Remove ${movie.title} from watchlist` : `Add ${movie.title} to watchlist`}
                 aria-pressed={wl}
-                className={`stream-card__btn ${wl ? 'stream-card__btn--active-blue' : ''} ${
+                className={`stream-card__btn movie-card__btn ${wl ? 'stream-card__btn--active-blue' : ''} ${
                   bookmarkBouncing ? 'animate-bookmark-bounce' : ''
                 }`}
               >
@@ -138,12 +139,12 @@ export function MovieCard({ movie, reason, index = 0, rank }: Props) {
           </div>
 
           {/* ── Movie Information Strip ── */}
-          <div className="stream-card__info">
-            <h3 className="stream-card__title" title={movie.title}>
+          <div className="stream-card__info movie-card__body movie-card__info">
+            <h3 className="stream-card__title movie-card__title" title={movie.title}>
               {movie.title}
             </h3>
 
-            <div className="stream-card__meta">
+            <div className="stream-card__meta movie-card__meta">
               <span>{year}</span>
               {firstGenre && (
                 <>

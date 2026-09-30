@@ -16,9 +16,17 @@ export function HeroSection({ movies }: Props) {
   const items = movies.slice(0, 3)
   const [index, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [imgFailed, setImgFailed] = useState(false)
 
   const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useLibrary()
   const { getGenreName } = useGenres()
+
+  const movie = items[index]
+
+  // Reset imgFailed when current movie changes
+  useEffect(() => {
+    setImgFailed(false)
+  }, [movie?.id])
 
   const nextSlide = useCallback(() => {
     if (items.length > 0) {
@@ -49,7 +57,6 @@ export function HeroSection({ movies }: Props) {
     return () => clearInterval(timer)
   }, [items.length, isHovered, nextSlide])
 
-  const movie = items[index]
   if (!movie) return null
 
   const inWl = isInWatchlist(movie.id)
@@ -73,13 +80,14 @@ export function HeroSection({ movies }: Props) {
     >
       <div className="hero-cinematic">
         {/* Full-bleed Backdrop with Subtle Ken Burns Zoom */}
-        {backdrop ? (
+        {backdrop && !imgFailed ? (
           <img
             key={movie.id}
             src={backdrop}
             alt=""
             aria-hidden="true"
             loading="eager"
+            onError={() => setImgFailed(true)}
             className="hero-ken-burns hero-cinematic__img"
           />
         ) : (

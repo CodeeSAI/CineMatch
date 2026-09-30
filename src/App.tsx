@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { LibraryProvider } from './context/LibraryContext'
 import { GenresProvider } from './context/GenresContext'
 import { SetupRequired } from './components/ui/SetupRequired'
@@ -31,6 +31,10 @@ function AppRoutes() {
         <Route path="/favorites"    element={<FavoritesPage />} />
         <Route path="/watchlist"    element={<WatchlistPage />} />
         <Route path="/profile"      element={<ProfilePage />} />
+        
+        {/* Redirect for Indian Cinema nav link to the Discover page with appropriate filters */}
+        <Route path="/indian-cinema" element={<Navigate to="/discover?language=hi&sortBy=popularity&sortDir=desc" replace />} />
+        
         <Route path="*"             element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

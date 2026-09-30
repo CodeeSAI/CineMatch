@@ -5,9 +5,13 @@ import { Layout } from '../../components/layout/Layout'
 import { MovieGrid } from '../../components/movie/MovieGrid'
 import { SkeletonGrid } from '../../components/ui/Skeleton'
 import { ErrorState } from '../../components/ui/ErrorState'
-import { EmptyState } from '../../components/ui/EmptyState'
+import { OfflineState } from '../../components/ui/OfflineState'
+import { NoResultsState } from '../../components/ui/NoResultsState'
+import { SlowNetworkNotice } from '../../components/ui/SlowNetworkNotice'
 import { LoadMoreButton } from '../../components/ui/LoadMoreButton'
 import { useDebounce } from '../../hooks/useDebounce'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
+import { useSlowNetwork } from '../../hooks/useSlowNetwork'
 import { searchMovies } from '../../services/tmdb/movies'
 import type { TMDBMovie } from '../../services/tmdb/types'
 import type { ApiError } from '../../types'
@@ -32,6 +36,8 @@ export default function SearchPage() {
   const [input, setInput] = useState(initialQuery)
   const debouncedQuery = useDebounce(input.trim(), DEBOUNCE_MS)
 
+  const isOnline = useNetworkStatus()
+
   const [movies, setMovies] = useState<TMDBMovie[]>([])
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState<number | null>(null)
@@ -40,6 +46,9 @@ export default function SearchPage() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<ApiError | null>(null)
   const [retryKey, setRetryKey] = useState(0)
+
+  // Track slow network state without blocking UI
+  const isSlow = useSlowNetwork(loading, 3500)
 
   // Ref to hold current AbortController so we can cancel stale requests
   const abortRef = useRef<AbortController | null>(null)
@@ -64,6 +73,14 @@ export default function SearchPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery])
 
+  // Re-fetch automatically when coming back online if in error state
+  useEffect(() => {
+    if (isOnline && error && debouncedQuery) {
+      setError(null)
+      setRetryKey((k) => k + 1)
+    }
+  }, [isOnline, error, debouncedQuery])
+
   // Main search effect — fires when debounced query changes
   useEffect(() => {
     // Abort any in-flight request
@@ -75,6 +92,12 @@ export default function SearchPage() {
       setHasMore(false)
       setLoading(false)
       setError(null)
+      return
+    }
+
+    if (!navigator.onLine) {
+      setError({ type: 'NETWORK', message: 'You are currently offline. Please check your internet connection.' } as ApiError)
+      setLoading(false)
       return
     }
 
@@ -96,10 +119,13 @@ export default function SearchPage() {
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
+        const isOffline = !navigator.onLine || (err instanceof TypeError && err.message.toLowerCase().includes('failed to fetch'))
         setError(
-          err instanceof Error
-            ? (err as ApiError)
-            : ({ type: 'GENERIC', message: String(err) } as ApiError),
+          isOffline
+            ? ({ type: 'NETWORK', message: 'Network connection lost.' } as ApiError)
+            : err instanceof Error
+              ? (err as ApiError)
+              : ({ type: 'GENERIC', message: String(err) } as ApiError),
         )
         setLoading(false)
       })
@@ -125,6 +151,7 @@ export default function SearchPage() {
 
   const hasQuery = debouncedQuery.length > 0
   const noResults = hasQuery && !loading && !error && movies.length === 0
+  const isOfflineError = !isOnline || (error && error.type === 'NETWORK')
 
   function handleClear() {
     setInput('')
@@ -134,6 +161,11 @@ export default function SearchPage() {
 
   function handleSuggestionClick(term: string) {
     setInput(term)
+  }
+
+  function handleRetry() {
+    setError(null)
+    setRetryKey((k) => k + 1)
   }
 
   return (
@@ -237,31 +269,40 @@ export default function SearchPage() {
           )}
         </div>
 
+        {/* Slow Network Notice */}
+        {loading && isSlow && (
+          <div style={{ marginBottom: 20 }}>
+            <SlowNetworkNotice />
+          </div>
+        )}
+
         {/* Results Count Banner */}
-        {hasQuery && totalResults !== null && !loading && (
+        {hasQuery && totalResults !== null && !loading && !error && (
           <p className="results-count" style={{ textAlign: 'center', marginBottom: 24 }}>
             Found {totalResults.toLocaleString()} {totalResults === 1 ? 'result' : 'results'} for &ldquo;{debouncedQuery}&rdquo;
           </p>
         )}
 
-        {/* States */}
+        {/* States Precedence: Loading -> Error/Offline -> Zero Results -> Content */}
         {loading && <SkeletonGrid count={12} />}
 
-        {error && !loading && (
+        {!loading && hasQuery && isOfflineError && (
+          <OfflineState onRetry={handleRetry} />
+        )}
+
+        {!loading && hasQuery && error && !isOfflineError && (
           <ErrorState
             error={error}
-            onRetry={() => {
-              setError(null)
-              setRetryKey((k) => k + 1)
-            }}
+            title="Search Unavailable"
+            onRetry={handleRetry}
           />
         )}
 
-        {noResults && (
-          <EmptyState
-            icon={<Search size={48} strokeWidth={1.2} />}
-            title={`No results for "${debouncedQuery}"`}
-            description="We couldn't find any movies matching that query. Check your spelling or try another keyword."
+        {!loading && noResults && (
+          <NoResultsState
+            query={debouncedQuery}
+            onClear={handleClear}
+            browseLink="/discover"
           />
         )}
 

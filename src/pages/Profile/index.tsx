@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Edit3, Check, X, Star, History, Globe, Sparkles, Play } from 'lucide-react'
+import { Edit3, Check, X, Star, History, Globe, Sparkles, Play, Film } from 'lucide-react'
 import { Layout } from '../../components/layout/Layout'
+import { EmptyState } from '../../components/ui/EmptyState'
 import { ImageWithFallback } from '../../components/ui/ImageWithFallback'
 import { useLibrary } from '../../context/LibraryContext'
 import { useGenres } from '../../context/GenresContext'
@@ -423,9 +424,13 @@ export default function ProfilePage() {
           </h2>
 
           {last12Recent.length === 0 ? (
-            <p style={{ color: 'var(--color-muted)', fontSize: 14 }}>
-              You haven't viewed any movies yet. Explore titles on the Discover page.
-            </p>
+            <EmptyState
+              icon={<Film size={44} strokeWidth={1.2} />}
+              title="Nothing to continue watching"
+              description="Films you open and explore will automatically be remembered here for easy access."
+              actionLabel="Discover Movies"
+              actionLink="/discover"
+            />
           ) : (
             <div className="movie-grid">
               {last12Recent.map((movie) => (

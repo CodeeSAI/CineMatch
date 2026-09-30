@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { MovieCard } from './MovieCard'
 import { SkeletonRow } from '../ui/Skeleton'
 import { ErrorState } from '../ui/ErrorState'
+import { SlowNetworkNotice } from '../ui/SlowNetworkNotice'
+import { useSlowNetwork } from '../../hooks/useSlowNetwork'
 import type { TMDBMovie } from '../../services/tmdb/types'
 import type { ApiError } from '../../types'
 
@@ -27,6 +29,7 @@ export function MovieRow({
   variant = 'default',
 }: Props) {
   const rowRef = useRef<HTMLDivElement>(null)
+  const isSlow = useSlowNetwork(loading, 3500)
 
   function scroll(offset: number) {
     if (rowRef.current) {
@@ -68,10 +71,10 @@ export function MovieRow({
         <h2
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 22,
-            fontWeight: 600,
+            fontSize: 28,
+            fontWeight: 700,
             color: 'var(--color-text)',
-            letterSpacing: '-0.01em',
+            letterSpacing: '-0.02em',
           }}
         >
           {variant === 'gradient' || variant === 'jewel' ? (
@@ -91,7 +94,16 @@ export function MovieRow({
         )}
       </div>
 
-      {loading && <SkeletonRow count={8} />}
+      {loading && (
+        <div style={{ position: 'relative' }}>
+          {isSlow && (
+            <div style={{ marginBottom: 12 }}>
+              <SlowNetworkNotice message="Still loading movies…" />
+            </div>
+          )}
+          <SkeletonRow count={8} />
+        </div>
+      )}
 
       {error && !loading && (
         <ErrorState error={error} onRetry={onRetry} compact />

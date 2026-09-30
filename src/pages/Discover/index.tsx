@@ -5,7 +5,11 @@ import { MovieGrid } from '../../components/movie/MovieGrid'
 import { SkeletonGrid } from '../../components/ui/Skeleton'
 import { ErrorState } from '../../components/ui/ErrorState'
 import { EmptyState } from '../../components/ui/EmptyState'
+import { OfflineState } from '../../components/ui/OfflineState'
+import { SlowNetworkNotice } from '../../components/ui/SlowNetworkNotice'
 import { LoadMoreButton } from '../../components/ui/LoadMoreButton'
+import { useSlowNetwork } from '../../hooks/useSlowNetwork'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
 import {
   FilterPanel,
   paramsToFilters,
@@ -17,7 +21,7 @@ import type { FilterState } from './FilterPanel'
 import { discoverMovies } from '../../services/tmdb/movies'
 import { useGenres } from '../../context/GenresContext'
 import { INDIAN_LANGUAGES, getLanguageName } from '../../lib/languages'
-import { Film, SlidersHorizontal, X } from 'lucide-react'
+import { Film, SlidersHorizontal, X, RotateCcw } from 'lucide-react'
 import type { TMDBMovie } from '../../services/tmdb/types'
 import type { ApiError } from '../../types'
 
@@ -55,6 +59,22 @@ export default function DiscoverPage() {
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<ApiError | null>(null)
   const [retryKey, setRetryKey] = useState(0)
+
+  // Network & slow loading detection
+  const { isOnline } = useNetworkStatus()
+  const isSlow = useSlowNetwork(loading, 3500)
+
+  // Auto-retry when connection is restored
+  useEffect(() => {
+    function handleOnline() {
+      if (error) {
+        setError(null)
+        setRetryKey((k) => k + 1)
+      }
+    }
+    window.addEventListener('online', handleOnline)
+    return () => window.removeEventListener('online', handleOnline)
+  }, [error])
 
   // Mobile drawer state
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
@@ -374,20 +394,44 @@ export default function DiscoverPage() {
             )}
 
             {/* Results count */}
-            {totalResults !== null && !loading && (
+            {totalResults !== null && !loading && !error && movies.length > 0 && (
               <p className="results-count">
                 {totalResults.toLocaleString()} {totalResults === 1 ? 'movie' : 'movies'} found
                 {filters.language ? ` in ${getLanguageName(filters.language)}` : ''}
               </p>
             )}
 
+            {/* Slow network non-blocking indicator */}
+            {loading && isSlow && (
+              <SlowNetworkNotice
+                message="Taking a little longer than usual…"
+                subMessage="We're still retrieving movies from the catalog."
+              />
+            )}
+
             {/* Loading skeletons */}
-            {loading && <SkeletonGrid count={18} />}
+            {loading && <SkeletonGrid count={15} />}
 
-            {/* Error state */}
-            {error && !loading && <ErrorState error={error} onRetry={handleRetry} />}
+            {/* Offline state (when device has no connection) */}
+            {!loading && (!isOnline || (error && error.type === 'NETWORK')) && (
+              <OfflineState
+                onRetry={handleRetry}
+                message="Connect to the internet to explore cinema across genres and languages."
+              />
+            )}
 
-            {/* Empty state */}
+            {/* API Error state (when online but TMDB request failed) */}
+            {!loading && isOnline && error && error.type !== 'NETWORK' && (
+              <ErrorState
+                error={error}
+                onRetry={handleRetry}
+                title="Couldn't load movies"
+                description="We couldn't connect to the movie database right now. Please try again."
+                showHomeButton
+              />
+            )}
+
+            {/* Empty state — when query succeeded but 0 movies match */}
             {!loading && !error && movies.length === 0 && (
               <EmptyState
                 icon={<Film size={48} strokeWidth={1.2} />}
@@ -395,7 +439,25 @@ export default function DiscoverPage() {
                 description={
                   filters.language
                     ? `No films matched your filters for ${getLanguageName(filters.language)}. Try relaxing your rating or year criteria.`
-                    : 'Try adjusting or clearing your filters.'
+                    : 'No movies match your current filter settings. Try relaxing your year, genre, or rating constraints.'
+                }
+                action={
+                  <button
+                    type="button"
+                    onClick={handleClearAll}
+                    className="btn-primary"
+                    style={{
+                      padding: '9px 20px',
+                      fontSize: 13,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <RotateCcw size={14} />
+                    <span>Clear all filters</span>
+                  </button>
                 }
               />
             )}

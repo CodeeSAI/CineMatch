@@ -124,16 +124,9 @@ export default function WatchlistPage() {
           <EmptyState
             icon={<Bookmark size={48} strokeWidth={1.2} />}
             title="Your watchlist is empty"
-            description="Add titles you want to watch soon, and organise your viewing queue."
-            action={
-              <Link
-                to="/discover"
-                className="btn-primary"
-                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-              >
-                Browse movies
-              </Link>
-            }
+            description="Save movies you plan to watch later and organise your viewing queue."
+            actionLabel="Browse Movies"
+            actionLink="/discover"
           />
         ) : (
           <div className="movie-grid">
