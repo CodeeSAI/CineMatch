@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
+import { NetworkBanner } from './NetworkBanner'
 import type { ReactNode } from 'react'
 
 interface Props {
@@ -34,6 +35,7 @@ export function Layout({ children, title }: Props) {
       </div>
 
       <Navbar />
+      <NetworkBanner />
       <main
         id="main-content"
         className="page-enter"

@@ -6,9 +6,13 @@ import { BackButton } from '../../components/ui/BackButton'
 import { MovieGrid } from '../../components/movie/MovieGrid'
 import { SkeletonGrid } from '../../components/ui/Skeleton'
 import { ErrorState } from '../../components/ui/ErrorState'
+import { OfflineState } from '../../components/ui/OfflineState'
 import { EmptyState } from '../../components/ui/EmptyState'
+import { SlowNetworkNotice } from '../../components/ui/SlowNetworkNotice'
 import { LoadMoreButton } from '../../components/ui/LoadMoreButton'
 import { useGenres } from '../../context/GenresContext'
+import { useNetworkStatus } from '../../hooks/useNetworkStatus'
+import { useSlowNetwork } from '../../hooks/useSlowNetwork'
 import { discoverMovies } from '../../services/tmdb/movies'
 import { getGenreColor } from '../../lib/genreColors'
 import { useGenreBackdrop } from '../../hooks/useGenreBackdrop'
@@ -29,6 +33,8 @@ export default function GenreMoviesPage() {
   const pageTitle = genreName ? `${genreName} Movies` : 'Genre Movies'
   const colors = getGenreColor(genreName)
 
+  const isOnline = useNetworkStatus()
+
   const [movies, setMovies] = useState<TMDBMovie[]>([])
   const [page, setPage] = useState(1)
   const [totalResults, setTotalResults] = useState<number | null>(null)
@@ -39,14 +45,31 @@ export default function GenreMoviesPage() {
   const [sortBy, setSortBy] = useState('popularity.desc')
   const [retryKey, setRetryKey] = useState(0)
 
+  // Track slow loading
+  const isSlow = useSlowNetwork(loading, 3500)
+
   // Dynamic TMDB backdrop for header banner with 24h cache and graceful fallback
   const { backdropUrl } = useGenreBackdrop(id ? Number(id) : undefined, true, 'w780')
   const [bannerImgLoaded, setBannerImgLoaded] = useState(false)
   const [bannerImgError, setBannerImgError] = useState(false)
 
+  // Re-fetch automatically when coming back online
+  useEffect(() => {
+    if (isOnline && error && error.type === 'NETWORK') {
+      setError(null)
+      setRetryKey((k) => k + 1)
+    }
+  }, [isOnline, error])
+
   // Fetch page 1 when genre ID, sort order, or retry changes
   useEffect(() => {
     if (!id) return
+
+    if (!navigator.onLine) {
+      setLoading(false)
+      setError({ type: 'NETWORK', message: 'You are currently offline. Please check your internet connection.' } as ApiError)
+      return
+    }
 
     const controller = new AbortController()
     setLoading(true)
@@ -71,10 +94,13 @@ export default function GenreMoviesPage() {
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
+        const isOffline = !navigator.onLine || (err instanceof TypeError && err.message.toLowerCase().includes('failed to fetch'))
         setError(
-          err instanceof Error
-            ? (err as ApiError)
-            : ({ type: 'GENERIC', message: String(err) } as ApiError),
+          isOffline
+            ? ({ type: 'NETWORK', message: 'Network connection lost.' } as ApiError)
+            : err instanceof Error
+              ? (err as ApiError)
+              : ({ type: 'GENERIC', message: String(err) } as ApiError),
         )
         setLoading(false)
       })
@@ -153,7 +179,7 @@ export default function GenreMoviesPage() {
             padding: '32px 28px',
             marginBottom: 32,
             border: `1px solid ${colors.border}`,
-            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.90) 100%)`,
+            background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.90) 100%)`,
             overflow: 'hidden',
           }}
         >
@@ -185,7 +211,7 @@ export default function GenreMoviesPage() {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: `linear-gradient(to right, rgba(11, 7, 20, 0.94) 0%, rgba(11, 7, 20, 0.80) 55%, rgba(11, 7, 20, 0.65) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.85) 100%)`,
+                  background: `linear-gradient(to right, rgba(5, 6, 11, 0.94) 0%, rgba(5, 6, 11, 0.80) 55%, rgba(5, 6, 11, 0.65) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.85) 100%)`,
                   pointerEvents: 'none',
                   zIndex: 1,
                 }}
@@ -280,11 +306,23 @@ export default function GenreMoviesPage() {
           </p>
         )}
 
+        {/* Slow network notice */}
+        {loading && isSlow && (
+          <div style={{ marginBottom: 20 }}>
+            <SlowNetworkNotice message="Loading genre titles…" />
+          </div>
+        )}
+
         {/* Loading state */}
         {loading && <SkeletonGrid count={18} />}
 
+        {/* Offline state */}
+        {!loading && !isOnline && (
+          <OfflineState onRetry={handleRetry} />
+        )}
+
         {/* Error state */}
-        {error && !loading && (
+        {!loading && isOnline && error && (
           <ErrorState error={error} onRetry={handleRetry} />
         )}
 
@@ -293,7 +331,9 @@ export default function GenreMoviesPage() {
           <EmptyState
             icon={<Film size={48} strokeWidth={1.2} />}
             title="No movies found"
-            description={`No movies found for ${genreName || 'this genre'}.`}
+            description={`No movies found for ${genreName || 'this genre'}. Explore other cinema categories.`}
+            actionLabel="Browse All Genres"
+            actionLink="/genres"
           />
         )}
 

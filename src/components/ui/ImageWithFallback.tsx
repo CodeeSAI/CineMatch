@@ -9,8 +9,8 @@ interface Props {
 }
 
 /**
- * Renders an img tag; on error or missing src, shows a dark placeholder
- * with a film icon so the layout never breaks due to missing images.
+ * Robust image component with graceful dark placeholder fallback.
+ * Prevents layout shifts and broken image indicators when network or TMDB asset fails.
  */
 export function ImageWithFallback({ src, alt, className = '', style }: Props) {
   const [failed, setFailed] = useState(false)
@@ -22,15 +22,36 @@ export function ImageWithFallback({ src, alt, className = '', style }: Props) {
         aria-label={alt}
         role="img"
         style={{
-          ...style,
+          width: '100%',
+          height: '100%',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'rgba(255,255,255,0.04)',
+          background: 'linear-gradient(180deg, #090B14 0%, #0E121E 100%)',
           color: 'var(--color-subtle)',
+          padding: 12,
+          gap: 6,
+          boxSizing: 'border-box',
+          ...style,
         }}
       >
-        <Film size={28} strokeWidth={1.5} />
+        <Film size={26} strokeWidth={1.5} style={{ opacity: 0.6 }} />
+        <span
+          style={{
+            fontSize: 11,
+            color: 'var(--color-muted)',
+            textAlign: 'center',
+            lineHeight: 1.2,
+            maxWidth: '90%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            opacity: 0.75,
+          }}
+        >
+          {alt ? alt.replace(/ poster$/i, '') : 'No image'}
+        </span>
       </div>
     )
   }
@@ -40,7 +61,13 @@ export function ImageWithFallback({ src, alt, className = '', style }: Props) {
       src={src}
       alt={alt}
       className={className}
-      style={style}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block',
+        ...style,
+      }}
       loading="lazy"
       onError={() => setFailed(true)}
     />

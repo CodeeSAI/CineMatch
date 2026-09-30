@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Edit3, Check, X, Star, History, Globe, Sparkles } from 'lucide-react'
+import { Edit3, Check, X, Star, History, Globe, Sparkles, Play, Film } from 'lucide-react'
 import { Layout } from '../../components/layout/Layout'
+import { EmptyState } from '../../components/ui/EmptyState'
 import { ImageWithFallback } from '../../components/ui/ImageWithFallback'
 import { useLibrary } from '../../context/LibraryContext'
 import { useGenres } from '../../context/GenresContext'
@@ -423,49 +424,43 @@ export default function ProfilePage() {
           </h2>
 
           {last12Recent.length === 0 ? (
-            <p style={{ color: 'var(--color-muted)', fontSize: 14 }}>
-              You haven't viewed any movies yet. Explore titles on the Discover page.
-            </p>
+            <EmptyState
+              icon={<Film size={44} strokeWidth={1.2} />}
+              title="Nothing to continue watching"
+              description="Films you open and explore will automatically be remembered here for easy access."
+              actionLabel="Discover Movies"
+              actionLink="/discover"
+            />
           ) : (
             <div className="movie-grid">
-              {last12Recent.map((movie) => (
+              {last12Recent.map((movie, idx) => (
                 <Link
-                  key={movie.id}
+                  key={`${movie.id}-${idx}`}
                   to={`/movie/${movie.id}`}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <article className="movie-card">
-                    <div className="movie-card__poster poster-ratio">
+                  <article className="stream-card">
+                    <div className="stream-card__media poster-ratio">
                       <ImageWithFallback
-                        src={posterUrl(movie.poster_path, 'w342')}
+                        src={posterUrl(movie.poster_path, 'w500') || posterUrl(movie.poster_path, 'w342')}
                         alt={`${movie.title} poster`}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                        }}
+                        className="stream-card__img"
                       />
+                      <div className="stream-card__rating">
+                        <Star size={11} fill="currentColor" strokeWidth={0} />
+                        <span>{formatRating(movie.vote_average)}</span>
+                      </div>
+                      <div className="stream-card__scrim" aria-hidden="true" />
+                      <div className="stream-card__play-wrap" aria-hidden="true">
+                        <span className="stream-card__play-btn">
+                          <Play size={18} fill="currentColor" style={{ marginLeft: 2 }} />
+                        </span>
+                      </div>
                     </div>
-                    <div className="movie-card__info">
-                      <p className="movie-card__title line-clamp-2">{movie.title}</p>
-                      <div className="movie-card__meta">
-                        <span className="movie-card__year">
-                          {formatYear(movie.release_date)}
-                        </span>
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4,
-                            fontSize: 12,
-                            fontWeight: 600,
-                            color: 'var(--color-accent)',
-                          }}
-                        >
-                          <Star size={11} fill="currentColor" />
-                          {formatRating(movie.vote_average)}
-                        </span>
+                    <div className="stream-card__info">
+                      <h3 className="stream-card__title" title={movie.title}>{movie.title}</h3>
+                      <div className="stream-card__meta">
+                        <span>{formatYear(movie.release_date)}</span>
                       </div>
                     </div>
                   </article>

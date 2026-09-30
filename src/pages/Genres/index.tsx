@@ -74,7 +74,7 @@ function GenreTileCard({ item, genreId, genreName }: GenreTileCardProps) {
       to={`/genres/${genreId}`}
       className="genre-tile"
       style={{
-        background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.88) 100%)`,
+        background: `linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.90) 100%)`,
         border: `1px solid ${colors.border}`,
         ['--tile-glow' as string]: colors.glow,
       }}
@@ -96,7 +96,7 @@ function GenreTileCard({ item, genreId, genreName }: GenreTileCardProps) {
           <div
             className="genre-tile__overlay"
             style={{
-              background: `linear-gradient(to bottom, rgba(11, 7, 20, 0.35) 0%, rgba(11, 7, 20, 0.70) 50%, rgba(11, 7, 20, 0.95) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(21, 14, 36, 0.82) 100%)`,
+              background: `linear-gradient(to bottom, rgba(5, 6, 11, 0.35) 0%, rgba(5, 6, 11, 0.72) 50%, rgba(5, 6, 11, 0.95) 100%), linear-gradient(135deg, ${colors.bg} 0%, rgba(14, 17, 28, 0.85) 100%)`,
             }}
           />
         </>

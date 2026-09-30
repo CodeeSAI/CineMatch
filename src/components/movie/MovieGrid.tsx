@@ -10,7 +10,7 @@ export function MovieGrid({ movies }: Props) {
   return (
     <div className="movie-grid">
       {movies.map((movie, idx) => (
-        <MovieCard key={movie.id} movie={movie} index={idx} />
+        <MovieCard key={`${movie.id}-${idx}`} movie={movie} index={idx} />
       ))}
     </div>
   )

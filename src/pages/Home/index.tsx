@@ -4,6 +4,9 @@ import { HeroSection } from '../../components/movie/HeroSection'
 import { MovieRow } from '../../components/movie/MovieRow'
 import { SkeletonHero } from '../../components/ui/Skeleton'
 import { ErrorState } from '../../components/ui/ErrorState'
+import { OfflineState } from '../../components/ui/OfflineState'
+import { EmptyState } from '../../components/ui/EmptyState'
+import { SlowNetworkNotice } from '../../components/ui/SlowNetworkNotice'
 import { useFetch } from '../../hooks/useFetch'
 import { useLibrary } from '../../context/LibraryContext'
 import { getRecommendations, type RecommendResult } from '../../lib/recommend'
@@ -80,10 +83,13 @@ export default function HomePage() {
       })
       .catch((err: unknown) => {
         if (controller.signal.aborted) return
+        const isOffline = !navigator.onLine || (err instanceof TypeError && err.message.toLowerCase().includes('failed to fetch'))
         setIndianError(
-          err instanceof Error
-            ? (err as ApiError)
-            : ({ type: 'GENERIC', message: String(err) } as ApiError),
+          isOffline
+            ? ({ type: 'NETWORK', message: 'Network connection lost.' } as ApiError)
+            : err instanceof Error
+              ? (err as ApiError)
+              : ({ type: 'GENERIC', message: String(err) } as ApiError),
         )
         setIndianLoading(false)
       })
@@ -94,11 +100,35 @@ export default function HomePage() {
   return (
     <Layout title="Home">
       {/* ── Hero ──────────────────────────────────────────── */}
-      {trending.loading && <SkeletonHero />}
+      {trending.loading && (
+        <div style={{ position: 'relative' }}>
+          {trending.isSlow && (
+            <div style={{ position: 'absolute', top: 28, left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+              <SlowNetworkNotice message="Still loading spotlight films…" />
+            </div>
+          )}
+          <SkeletonHero />
+        </div>
+      )}
 
       {trending.error && !trending.loading && (
-        <div style={{ padding: '48px 24px' }}>
-          <ErrorState error={trending.error} onRetry={trending.refetch} />
+        <div style={{ padding: '48px 24px', maxWidth: 1200, margin: '0 auto' }}>
+          {trending.isOffline ? (
+            <OfflineState onRetry={trending.refetch} />
+          ) : (
+            <ErrorState error={trending.error} onRetry={trending.refetch} />
+          )}
+        </div>
+      )}
+
+      {!trending.loading && !trending.error && (!trending.data?.results || trending.data.results.length === 0) && (
+        <div style={{ padding: '64px 24px', maxWidth: 1200, margin: '0 auto' }}>
+          <EmptyState
+            title="Featured Films Unavailable"
+            description="We could not find any featured films right now. Explore our catalog below."
+            actionLabel="Discover Movies"
+            actionLink="/discover"
+          />
         </div>
       )}
 
@@ -111,7 +141,7 @@ export default function HomePage() {
         style={{
           maxWidth: 1400,
           margin: '0 auto',
-          padding: '48px 24px 0',
+          padding: '64px 48px 0',
         }}
       >
         {/* Recommendation Row — hidden if nothing is saved */}
@@ -124,52 +154,44 @@ export default function HomePage() {
           />
         )}
 
-        {/* Tabbed Indian Cinema Section (Vivid Gradient Band) */}
-        <div className="row-band--gradient">
-          <div style={{ marginBottom: 16 }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                overflowX: 'auto',
-                paddingBottom: 4,
-                scrollbarWidth: 'none',
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-sun)',
-                  marginRight: 4,
-                  flexShrink: 0,
-                }}
-              >
-                Indian Cinema:
-              </span>
-              {INDIAN_TABS.map((tab) => {
-                const isActive = activeIndianLang === tab.code
-                return (
-                  <button
-                    key={tab.code}
-                    type="button"
-                    onClick={() => setActiveIndianLang(tab.code)}
-                    className={`quick-chip ${isActive ? 'quick-chip--active' : ''}`}
-                    style={{ flexShrink: 0 }}
-                  >
-                    <span>{tab.label}</span>
-                    <span style={{ fontSize: 11, opacity: 0.8 }}>({tab.native})</span>
-                  </button>
-                )
-              })}
+        {/* Curated Indian Cinema Showcase */}
+        <section className="curated-showcase curated-showcase--indian" aria-label="Indian Cinema Collection">
+          <div className="curated-showcase__ambient-glow" aria-hidden="true" />
+          
+          <div className="curated-showcase__header">
+            <div className="curated-showcase__titles">
+              <div className="curated-showcase__eyebrow">
+                <span className="curated-showcase__dot" />
+                <span>CURATED COLLECTION</span>
+              </div>
+              <h2 className="curated-showcase__title">INDIAN CINEMA</h2>
+            </div>
+
+            {/* Language Selector Glass Tabs */}
+            <div className="curated-showcase__tabs-container">
+              <div className="curated-showcase__tabs" role="tablist" aria-label="Select Indian Cinema Language">
+                {INDIAN_TABS.map((tab) => {
+                  const isActive = activeIndianLang === tab.code
+                  return (
+                    <button
+                      key={tab.code}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setActiveIndianLang(tab.code)}
+                      className={`lang-glass-tab ${isActive ? 'lang-glass-tab--active' : ''}`}
+                    >
+                      <span className="lang-glass-tab__name">{tab.label}</span>
+                      <span className="lang-glass-tab__native">{tab.native}</span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           </div>
 
           <MovieRow
-            title={`${INDIAN_TABS.find((t) => t.code === activeIndianLang)?.label} Cinema`}
+            title={`${INDIAN_TABS.find((t) => t.code === activeIndianLang)?.label} Spotlight`}
             movies={indianMovies}
             loading={indianLoading}
             error={indianError}
@@ -177,7 +199,7 @@ export default function HomePage() {
             viewAllTo={`/discover?language=${activeIndianLang}&sortBy=popularity&sortDir=desc`}
             variant="nested"
           />
-        </div>
+        </section>
 
         {/* Trending — Plain dark row */}
         <MovieRow
